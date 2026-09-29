@@ -1,4 +1,3 @@
-Aquí tienes el contenido completo del **`README.md`** optimizado con sintaxis limpia de Markdown, jerarquía visual clara mediante íconos y formato listo para copiar y pegar directamente en tu archivo:
 
 ```markdown
 # 🔐 Sistema de Autenticación en Java
