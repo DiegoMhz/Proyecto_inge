@@ -1,3 +1,4 @@
+package model;
 public enum EstadoOperativo {
     activo,
     en_mantenimiento,
