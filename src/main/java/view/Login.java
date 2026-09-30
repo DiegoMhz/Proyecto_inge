@@ -24,7 +24,7 @@ public class Login extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Creación e inserción de componentes
-        panel.add(new JLabel("Usuario:"));
+        panel.add(new JLabel(""));
         txtUsuario = new JTextField();
         panel.add(txtUsuario);
 
