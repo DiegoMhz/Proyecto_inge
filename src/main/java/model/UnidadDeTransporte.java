@@ -1,3 +1,4 @@
+package model; 
 public class UnidadDeTransporte{
    private String numeroAsignado;
    private String placa;
