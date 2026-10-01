@@ -1,0 +1,21 @@
+[ {
+  "id" : "1",
+  "ruta" : {
+    "nombreRuta" : "caracas los teques",
+    "origen" : "los teques",
+    "destino" : "caracas",
+    "tipoRuta" : null,
+    "paradas" : [ ]
+  },
+  "unidad" : {
+    "numeroAsignado" : null,
+    "placa" : "92J3RD",
+    "modelo" : "mercedes",
+    "capacidad" : 0,
+    "estadoOperativo" : null
+  },
+  "conductor" : {
+    "usuario" : "Eloy",
+    "password" : null
+  },
+  "fechaLlegada"

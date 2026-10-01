@@ -6,6 +6,9 @@ public class UnidadDeTransporte{
    private int capacidad_de_pasajeros;
    private EstadoOperativo estado;
 
+   public UnidadDeTransporte() {
+    }
+   
    public UnidadDeTransporte(String _numeroAsignado, String _placa, String _modelo, int _capacidad_de_pasajeros){
     this.numeroAsignado= _numeroAsignado;
     this.placa= _placa;
