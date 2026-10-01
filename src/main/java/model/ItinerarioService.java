@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ItinerarioService {
 
-    private static final String RUTA_ARCHIVO = "src/main/resources/data/itinerarios.json";
+    private static final String RUTA_ARCHIVO = "src/main/java/resources/data/itinerarios.json";
     private final ObjectMapper mapper;
 
     public ItinerarioService() {

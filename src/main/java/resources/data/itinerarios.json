@@ -1,0 +1,27 @@
+[ {
+  "id" : "01",
+  "ruta" : {
+    "nombreRuta" : "caraca losteque",
+    "origen" : "caraca",
+    "destino" : "losteque",
+    "tipoRuta" : "EXTRAURBANA",
+    "paradas" : [ "vallecoche" ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "6",
+    "placa" : "7",
+    "modelo" : "mercedes",
+    "capacidad" : 67,
+    "estadoOperativo" : "activo"
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "sixsevenaldo",
+    "password" : "67",
+    "lastName" : "dos santos aveiro",
+    "cedula" : "11676767",
+    "correo" : "67aldo@67.siu"
+  },
+  "fechaSalida" : "2026-10-15 08:00",
+  "fechaLlegada" : "2026-10-15 09:30"
+} ]

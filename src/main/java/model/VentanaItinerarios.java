@@ -1,28 +1,23 @@
 package model;
 
-import model.ControlDeItinerario;
-import model.Ruta;
-import model.UnidadDeTransporte;
-import model.Usuario;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
 
 public class VentanaItinerarios extends JFrame {
 
     private final ItinerarioService servicio;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     // Componentes del Formulario
     private JTextField txtId;
-    private JTextField txtRutaId, txtRutaNombre, txtRutaOrigen, txtRutaDestino;
-    private JTextField txtUnidadId, txtUnidadPlaca, txtUnidadModelo;
-    private JTextField txtConductorId, txtConductorNombre;
+    private JTextField txtRutaNombre, txtRutaOrigen, txtRutaDestino, txtParadas;
+    private JComboBox<Ruta.TipoRuta> cmbTipoRuta;
+    private JTextField txtUnidadNumero, txtUnidadPlaca, txtUnidadModelo, txtUnidadCapacidad;
+    private JComboBox<EstadoOperativo> cmbEstadoUnidad;
+    private JTextField txtConductorNombre, txtConductorApellido, txtConductorCedula, txtConductorCorreo;
+    private JPasswordField txtConductorPassword;
     private JTextField txtFechaSalida, txtFechaLlegada;
 
     // Componentes de la Tabla
@@ -59,19 +54,25 @@ public class VentanaItinerarios extends JFrame {
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        JPanel panelForm = new JPanel(new GridLayout(12, 2, 8, 8));
+        JPanel panelForm = new JPanel(new GridLayout(0, 2, 8, 8));
 
         // Campos del formulario
         txtId = new JTextField();
-        txtRutaId = new JTextField();
         txtRutaNombre = new JTextField();
         txtRutaOrigen = new JTextField();
         txtRutaDestino = new JTextField();
-        txtUnidadId = new JTextField();
+        txtParadas = new JTextField();
+        cmbTipoRuta = new JComboBox<>(Ruta.TipoRuta.values());
+        txtUnidadNumero = new JTextField();
         txtUnidadPlaca = new JTextField();
         txtUnidadModelo = new JTextField();
-        txtConductorId = new JTextField();
+        txtUnidadCapacidad = new JTextField();
+        cmbEstadoUnidad = new JComboBox<>(EstadoOperativo.values());
         txtConductorNombre = new JTextField();
+        txtConductorApellido = new JTextField();
+        txtConductorCedula = new JTextField();
+        txtConductorCorreo = new JTextField();
+        txtConductorPassword = new JPasswordField();
         txtFechaSalida = new JTextField("2026-10-15 08:00");
         txtFechaLlegada = new JTextField("2026-10-15 09:30");
 
@@ -81,36 +82,44 @@ public class VentanaItinerarios extends JFrame {
 
         panelForm.add(new JLabel("--- RUTA ---"));
         panelForm.add(new JLabel(""));
-        panelForm.add(new JLabel("ID / Nombre Ruta:"));
-        JPanel panelRutaGroup = new JPanel(new GridLayout(1, 2, 5, 0));
-        panelRutaGroup.add(txtRutaId);
-        panelRutaGroup.add(txtRutaNombre);
-        panelForm.add(panelRutaGroup);
-
-        panelForm.add(new JLabel("Origen / Destino:"));
-        JPanel panelOrigenDestino = new JPanel(new GridLayout(1, 2, 5, 0));
-        panelOrigenDestino.add(txtRutaOrigen);
-        panelOrigenDestino.add(txtRutaDestino);
-        panelForm.add(panelOrigenDestino);
+        panelForm.add(new JLabel("Nombre de ruta:"));
+        panelForm.add(txtRutaNombre);
+        panelForm.add(new JLabel("Origen:"));
+        panelForm.add(txtRutaOrigen);
+        panelForm.add(new JLabel("Destino:"));
+        panelForm.add(txtRutaDestino);
+        panelForm.add(new JLabel("Tipo de ruta:"));
+        panelForm.add(cmbTipoRuta);
+        panelForm.add(new JLabel("Paradas (separadas por comas):"));
+        panelForm.add(txtParadas);
 
         panelForm.add(new JLabel("--- UNIDAD DE TRANSPORTE ---"));
         panelForm.add(new JLabel(""));
-        panelForm.add(new JLabel("ID / Placa / Modelo:"));
-        JPanel panelUnidadGroup = new JPanel(new GridLayout(1, 3, 5, 0));
-        panelUnidadGroup.add(txtUnidadId);
-        panelUnidadGroup.add(txtUnidadPlaca);
-        panelUnidadGroup.add(txtUnidadModelo);
-        panelForm.add(panelUnidadGroup);
+        panelForm.add(new JLabel("Número asignado:"));
+        panelForm.add(txtUnidadNumero);
+        panelForm.add(new JLabel("Placa:"));
+        panelForm.add(txtUnidadPlaca);
+        panelForm.add(new JLabel("Modelo:"));
+        panelForm.add(txtUnidadModelo);
+        panelForm.add(new JLabel("Capacidad de pasajeros:"));
+        panelForm.add(txtUnidadCapacidad);
+        panelForm.add(new JLabel("Estado operativo:"));
+        panelForm.add(cmbEstadoUnidad);
 
         panelForm.add(new JLabel("--- CONDUCTOR ---"));
         panelForm.add(new JLabel(""));
-        panelForm.add(new JLabel("ID / Nombre Conductor:"));
-        JPanel panelConductorGroup = new JPanel(new GridLayout(1, 2, 5, 0));
-        panelConductorGroup.add(txtConductorId);
-        panelConductorGroup.add(txtConductorNombre);
-        panelForm.add(panelConductorGroup);
+        panelForm.add(new JLabel("Nombre:"));
+        panelForm.add(txtConductorNombre);
+        panelForm.add(new JLabel("Apellido:"));
+        panelForm.add(txtConductorApellido);
+        panelForm.add(new JLabel("Cédula:"));
+        panelForm.add(txtConductorCedula);
+        panelForm.add(new JLabel("Correo:"));
+        panelForm.add(txtConductorCorreo);
+        panelForm.add(new JLabel("Contraseña:"));
+        panelForm.add(txtConductorPassword);
 
-        panelForm.add(new JLabel("--- HORARIOS (yyyy-MM-dd HH:mm) ---"));
+        panelForm.add(new JLabel("--- HORARIOS ---"));
         panelForm.add(new JLabel(""));
         panelForm.add(new JLabel("Fecha/Hora Salida:"));
         panelForm.add(txtFechaSalida);
@@ -162,40 +171,45 @@ public class VentanaItinerarios extends JFrame {
      */
     private void procesarGuardado() {
         try {
-            // Validaciones básicas de campos vacíos
-            if (txtId.getText().trim().isEmpty() || txtFechaSalida.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El ID y las fechas son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            String salida = txtFechaSalida.getText().trim();
+            String llegada = txtFechaLlegada.getText().trim();
+            if (txtId.getText().trim().isEmpty() || salida.isEmpty() || llegada.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El ID y las horas son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // Parsing de Fechas
-            LocalDateTime salida = LocalDateTime.parse(txtFechaSalida.getText().trim(), formatter);
-            LocalDateTime llegada = LocalDateTime.parse(txtFechaLlegada.getText().trim(), formatter);
+            Ruta ruta = new Ruta(
+                txtRutaNombre.getText().trim(),
+                txtRutaOrigen.getText().trim(),
+                txtRutaDestino.getText().trim(),
+                (Ruta.TipoRuta) cmbTipoRuta.getSelectedItem()
+            );
+            List<String> paradas = Arrays.stream(txtParadas.getText().split(","))
+                .map(String::trim)
+                .filter(parada -> !parada.isEmpty())
+                .toList();
+            ruta.setParadas(paradas);
 
-            // Construcción de objetos internos (Asegúrate de ajustar los parámetros según los constructores de tus clases)
-            Ruta ruta = new Ruta();
-            //ruta.setId(txtRutaId.getText().trim());
-            ruta.setNombreRuta(txtRutaNombre.getText().trim());
-            ruta.setOrigen(txtRutaOrigen.getText().trim());
-            ruta.setDestino(txtRutaDestino.getText().trim());
+            UnidadDeTransporte unidad = new UnidadDeTransporte(
+                txtUnidadNumero.getText().trim(),
+                txtUnidadPlaca.getText().trim(),
+                txtUnidadModelo.getText().trim(),
+                Integer.parseInt(txtUnidadCapacidad.getText().trim())
+            );
+            unidad.setEstado((EstadoOperativo) cmbEstadoUnidad.getSelectedItem());
 
-            UnidadDeTransporte unidad = new UnidadDeTransporte();
-            //unidad.setNu(txtUnidadId.getText().trim());
-            unidad.setPlaca(txtUnidadPlaca.getText().trim());
-            unidad.setModelo(txtUnidadModelo.getText().trim());
+            Usuario conductor = new Usuario(
+                RolUsuario.CONDUCTOR,
+                txtConductorNombre.getText().trim(),
+                txtConductorApellido.getText().trim(),
+                txtConductorCedula.getText().trim(),
+                txtConductorCorreo.getText().trim(),
+                new String(txtConductorPassword.getPassword())
+            );
 
-            Usuario conductor = new Usuario();
-            //conductor.setId(txtConductorId.getText().trim());
-            conductor.setUsuario(txtConductorNombre.getText().trim());
-
-            // Construcción del objeto principal
-            ControlDeItinerario nuevoItinerario = new ControlDeItinerario();
-            nuevoItinerario.setId(txtId.getText().trim());
-            nuevoItinerario.setRuta(ruta);
-            nuevoItinerario.setUnidad(unidad);
-            nuevoItinerario.setConductor(conductor);
-            nuevoItinerario.setFechaSalida(salida);
-            nuevoItinerario.setFechaLlegada(llegada);
+            ControlDeItinerario nuevoItinerario = new ControlDeItinerario(
+                txtId.getText().trim(), ruta, unidad, conductor, salida, llegada
+            );
 
             // Persistencia en JSON
             boolean exito = servicio.agregarItinerario(nuevoItinerario);
@@ -207,8 +221,6 @@ public class VentanaItinerarios extends JFrame {
                 JOptionPane.showMessageDialog(this, "No se pudo guardar. Verifique si el ID ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-        } catch (DateTimeParseException ex) {
-            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Use el formato: yyyy-MM-dd HH:mm\nEjemplo: 2026-10-15 08:30", "Error de Formato", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al procesar los datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -225,9 +237,9 @@ public class VentanaItinerarios extends JFrame {
             String idRuta = (it.getRuta() != null) ? it.getRuta().getNombreRuta() : "N/A";
             String origenDestino = (it.getRuta() != null) ? it.getRuta().getOrigen() + " -> " + it.getRuta().getDestino() : "N/A";
             String unidad = (it.getUnidad() != null) ? it.getUnidad().getPlaca() : "N/A";
-            String conductor = (it.getConductor() != null) ? it.getConductor().getUsuario(): "N/A";
-            String salidaStr = (it.getFechaSalida() != null) ? it.getFechaSalida().format(formatter) : "N/A";
-            String llegadaStr = (it.getFechaLlegada() != null) ? it.getFechaLlegada().format(formatter) : "N/A";
+            String conductor = (it.getConductor() != null) ? it.getConductor().getName() : "N/A";
+            String salidaStr = (it.getFechaSalida() != null) ? it.getFechaSalida() : "N/A";
+            String llegadaStr = (it.getFechaLlegada() != null) ? it.getFechaLlegada() : "N/A";
 
             Object[] fila = {
                 it.getId(),
@@ -244,15 +256,19 @@ public class VentanaItinerarios extends JFrame {
 
     private void limpiarFormulario() {
         txtId.setText("");
-        txtRutaId.setText("");
         txtRutaNombre.setText("");
         txtRutaOrigen.setText("");
         txtRutaDestino.setText("");
-        txtUnidadId.setText("");
+        txtParadas.setText("");
+        txtUnidadNumero.setText("");
         txtUnidadPlaca.setText("");
         txtUnidadModelo.setText("");
-        txtConductorId.setText("");
+        txtUnidadCapacidad.setText("");
         txtConductorNombre.setText("");
+        txtConductorApellido.setText("");
+        txtConductorCedula.setText("");
+        txtConductorCorreo.setText("");
+        txtConductorPassword.setText("");
     }
 
     public static void main(String[] args) {

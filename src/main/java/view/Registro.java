@@ -1,103 +1,113 @@
 package view;
 
 import model.AutenticacionService;
-
 import javax.swing.*;
 import java.awt.*;
-
+import model.RolUsuario;
 public class Registro extends JFrame {
-    private JTextField txtUsuario;
-    private JPasswordField txtPassword;
-    private JPasswordField txtConfirmarPassword;
     private AutenticacionService authService;
+    JTextField inputName;
+    JTextField inputLastName;
+    JTextField inputCI;
+    JTextField inputEmail;
+    JPasswordField inputPassword;
+    JPasswordField inputConfirmPassword;
 
     public Registro() {
         this.authService = new AutenticacionService();
         initUI();
     }
 
+    private JPanel crearCampo(String textoEtiqueta, JComponent componente) {
+        JPanel div = new JPanel(new GridLayout(2, 1));
+        JLabel text = new JLabel(textoEtiqueta);
+        componente.putClientProperty("FlatLaf.style", "arc: 10");
+        div.add(text);
+        div.add(componente);
+        return div;
+    }
+
     private void initUI() {
+
         setTitle("Registro de Usuario");
-        setSize(420, 350);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Solo cierra esta ventana
+        setSize(700, 700);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Contenedor principal con GridBagLayout
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
+        // Contenedor principal con GridLayout (4 filas, 2 columnas, espacios de 10px)
+        JPanel panel = new JPanel(new GridLayout(8, 1, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // --- Título (H1) ---
-        JLabel h1 = new JLabel("Crear Cuenta");
-        h1.setFont(new Font("Arial", Font.BOLD, 18));
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        panel.add(h1, gbc);
+        // 1. Titulo
+        JLabel lblTitulo = new JLabel("REGISTRO", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(lblTitulo);
+        // Input Nombre
+        inputName = new JTextField();
+        panel.add(crearCampo("Nombre", inputName));
 
-        gbc.gridwidth = 1; // Resetear ancho a 1 columna
+        // Input Apellido
+        inputLastName = new JTextField();
+        panel.add(crearCampo("Apellido", inputLastName));
 
-        // --- Campo Usuario ---
-        JLabel lblUsuario = new JLabel("Usuario:");
-        gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
-        panel.add(lblUsuario, gbc);
+        // Input NumeroCedula
+        inputCI = new JTextField();
+        panel.add(crearCampo("Cedula", inputCI));
 
-        txtUsuario = new JTextField(15);
-        gbc.gridx = 1; gbc.gridy = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(txtUsuario, gbc);
+        // Input Email
+        inputEmail = new JTextField();
+        panel.add(crearCampo("Correo", inputEmail));
 
-        // --- Campo Contraseña ---
-        JLabel lblPassword = new JLabel("Contraseña:");
-        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE;
-        panel.add(lblPassword, gbc);
+        // Input Contraseña
+        inputPassword = new JPasswordField();
+        panel.add(crearCampo("Contraseña", inputPassword));
 
-        txtPassword = new JPasswordField(15);
-        gbc.gridx = 1; gbc.gridy = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(txtPassword, gbc);
+        // Input Confirmar Contraseña
+        inputConfirmPassword = new JPasswordField();
+        panel.add(crearCampo("Confirmar contraseña", inputConfirmPassword));
 
-        // --- Campo Confirmar Contraseña ---
-        JLabel lblConfirmar = new JLabel("Confirmar:");
-        gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE;
-        panel.add(lblConfirmar, gbc);
+        JButton btnRegistrar = new JButton("Registrarme");
+        panel.add((btnRegistrar));
 
-        txtConfirmarPassword = new JPasswordField(15);
-        gbc.gridx = 1; gbc.gridy = 3; gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(txtConfirmarPassword, gbc);
+        btnRegistrar.putClientProperty("FlatLaf.style", "arc: 10");
 
-        // --- Botón Registrar ---
-        JButton btnRegistrar = new JButton("Guardar Registro");
-        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(15, 8, 8, 8);
-        panel.add(btnRegistrar, gbc);
+        // 2. IMPORTANTE: Agregar el panel al JFrame
+        this.add(panel);
 
-        add(panel);
-
-        // Evento del botón al hacer clic
         btnRegistrar.addActionListener(e -> ejecutarRegistro());
     }
 
     private void ejecutarRegistro() {
-        String usuario = txtUsuario.getText().trim();
-        String pass = new String(txtPassword.getPassword());
-        String confirmPass = new String(txtConfirmarPassword.getPassword());
+        String name = inputName.getText().trim();
+        String lastName = inputLastName.getText().trim();
+        String cedula = inputCI.getText().trim();
+        String pass = new String(inputPassword.getPassword());
+        String confirmPass = new String(inputConfirmPassword.getPassword());
+        String email = inputEmail.getText().trim();
+        RolUsuario rol = RolUsuario.EXTERNO;
 
-        if (usuario.isEmpty() || pass.isEmpty() || confirmPass.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        if (name.isEmpty() || pass.isEmpty() || confirmPass.isEmpty() || lastName.isEmpty() || cedula.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (!pass.equals(confirmPass)) {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        boolean exito = authService.registrarUsuario(usuario, pass);
+        boolean exito = authService.registrarUsuario(rol, name, lastName, cedula, email, pass);
 
         if (exito) {
-            JOptionPane.showMessageDialog(this, "¡Usuario registrado correctamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "¡Usuario registrado correctamente!",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
             this.dispose(); // Cierra la ventana de registro
         } else {
-            JOptionPane.showMessageDialog(this, "El nombre de usuario ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El nombre de usuario ya existe.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

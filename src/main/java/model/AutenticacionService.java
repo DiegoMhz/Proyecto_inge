@@ -19,28 +19,44 @@ public class AutenticacionService {
             return new ArrayList<>();
         }
         try {
-            return mapper.readValue(file, new TypeReference<List<Usuario>>() {});
+            return mapper.readValue(file, new TypeReference<List<Usuario>>() {
+            });
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
+    public Usuario BuscarPorCedula(String cedula){
+        List<Usuario> lista= obtenerUsuarios();
+        for(Usuario u: lista){
+            if(u.getCedula() != null && u.getCedula().equalsIgnoreCase(cedula)){
+                return u;
+            }
+        }
+        return null;
+    }
+
     // Registrar un nuevo usuario en el JSON
-    public boolean registrarUsuario(String nombreUsuario, String password) {
+    public boolean registrarUsuario(RolUsuario rol, String name, String lastName, String cedula, String correo, String password) {
         List<Usuario> lista = obtenerUsuarios();
 
-        // Validar si el nombre de usuario ya existe
-        for (Usuario u : lista) {
-            if (u.getUsuario().equalsIgnoreCase(nombreUsuario)) {
-                return false; // Usuario duplicado
-            }
+        // Validar si el usuario ya se encuentra registrado
+        if(BuscarPorCedula(cedula)!=null){
+            return false;
         }
 
         // Agregar el nuevo usuario y guardar la lista actualizada en el archivo
-        lista.add(new Usuario(nombreUsuario, password));
+        lista.add(new Usuario(rol,name, lastName, cedula, correo, password));
+
+        File archivo = new File(RUTA_JSON);
+        File carpetaPadre = archivo.getParentFile();
+        if (carpetaPadre != null && !carpetaPadre.exists()) {
+            carpetaPadre.mkdirs();
+        }
+
         try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(RUTA_JSON), lista);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(archivo, lista);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

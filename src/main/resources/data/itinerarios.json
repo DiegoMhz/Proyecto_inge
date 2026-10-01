@@ -1,21 +1,25 @@
 [ {
-  "id" : "1",
+  "id" : "123",
   "ruta" : {
-    "nombreRuta" : "caracas los teques",
-    "origen" : "los teques",
-    "destino" : "caracas",
-    "tipoRuta" : null,
-    "paradas" : [ ]
+    "nombreRuta" : "123",
+    "origen" : "123",
+    "destino" : "123",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ "123" ]
   },
   "unidad" : {
-    "numeroAsignado" : null,
-    "placa" : "92J3RD",
-    "modelo" : "mercedes",
-    "capacidad" : 0,
-    "estadoOperativo" : null
+    "numeroAsignado" : "123",
+    "placa" : "123",
+    "modelo" : "231",
+    "capacidad" : 123,
+    "estadoOperativo" : "activo"
   },
   "conductor" : {
-    "usuario" : "Eloy",
-    "password" : null
+    "rol" : "CONDUCTOR",
+    "name" : "123",
+    "password" : "drg",
+    "lastName" : "123",
+    "cedula" : "drfg",
+    "correo" : "drg"
   },
-  "fechaLlegada"
+  "fechaSalida"

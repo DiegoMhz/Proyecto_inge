@@ -1,12 +1,12 @@
-// import view.Login;
+import view.Login;
 import javax.swing.SwingUtilities;
-import com.formdev.flatlaf.FlatDarkLaf;
+// import com.formdev.flatlaf.FlatDarkLaf;
 
 import model.VentanaItinerarios;
 
 public class Main {
     public static void main(String[] args) {
-        FlatDarkLaf.setup();
+        com.formdev.flatlaf.FlatLightLaf.setup();
         // Ejecutar la interfaz gráfica dentro del hilo de eventos de Swing (EDT)
         SwingUtilities.invokeLater(() -> {
             // 1. Instanciar la ventana
