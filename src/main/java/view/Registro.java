@@ -1,5 +1,5 @@
 package view;
-
+import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
 import model.AutenticacionService;
 import javax.swing.*;
@@ -33,9 +33,8 @@ public class Registro extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         panel.setBackground(new Color(255, 255, 255, 40));
         // 1. Titulo
-        JLabel lblTitulo = new JLabel("REGISTRO", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(lblTitulo);
+        JLabel title = createTitlePanel("REGISTRO");
+        panel.add(title);
         // Input Nombre
         inputName = new JTextField();
         panel.add(createInputPanel("Nombre", inputName));

@@ -1,5 +1,5 @@
 package view;
-
+import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
 import view.components.RadialGradient;
 import javax.swing.*;
@@ -22,7 +22,6 @@ public class Login extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        setLayout(new GridBagLayout());
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -31,10 +30,7 @@ public class Login extends JFrame {
         panel.setBackground(new Color(255, 255, 255, 40)); 
 
         // TITULO
-        JLabel title = new JLabel("INICIO DE SESION");
-        title.setFont(new Font("Arial", Font.BOLD, 18));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setForeground(Color.WHITE);
+        JLabel title = createTitlePanel("INICIO DE SESION");
         panel.add(title);
 
         // INPUT CEDULA
