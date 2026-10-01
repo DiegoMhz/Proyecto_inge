@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 
 public class Main {
     public static void main(String[] args) {
+
         FlatDarkLaf.setup();
         // Ejecutar la interfaz gráfica dentro del hilo de eventos de Swing (EDT)
         SwingUtilities.invokeLater(() -> {
@@ -15,3 +16,4 @@ public class Main {
         });
     }
 }
+
