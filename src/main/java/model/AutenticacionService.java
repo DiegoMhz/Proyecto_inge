@@ -19,7 +19,8 @@ public class AutenticacionService {
             return new ArrayList<>();
         }
         try {
-            return mapper.readValue(file, new TypeReference<List<Usuario>>() {});
+            return mapper.readValue(file, new TypeReference<List<Usuario>>() {
+            });
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -27,18 +28,18 @@ public class AutenticacionService {
     }
 
     // Registrar un nuevo usuario en el JSON
-    public boolean registrarUsuario(String nombreUsuario, String password) {
+    public boolean registrarUsuario(String name, String lastName, String cedula, String password) {
         List<Usuario> lista = obtenerUsuarios();
 
         // Validar si el nombre de usuario ya existe
         for (Usuario u : lista) {
-            if (u.getUsuario().equalsIgnoreCase(nombreUsuario)) {
+            if (u.getname().equalsIgnoreCase(name)) {
                 return false; // Usuario duplicado
             }
         }
 
         // Agregar el nuevo usuario y guardar la lista actualizada en el archivo
-        lista.add(new Usuario(nombreUsuario, password));
+        lista.add(new Usuario(name, password));
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(RUTA_JSON), lista);
             return true;
