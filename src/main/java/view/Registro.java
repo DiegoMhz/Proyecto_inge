@@ -3,7 +3,7 @@ package view;
 import model.AutenticacionService;
 import javax.swing.*;
 import java.awt.*;
-
+import model.RolUsuario;
 public class Registro extends JFrame {
     private AutenticacionService authService;
     JTextField inputName;
@@ -14,6 +14,7 @@ public class Registro extends JFrame {
     JPasswordField inputConfirmPassword;
 
     public Registro() {
+        this.authService = new AutenticacionService();
         initUI();
     }
 
@@ -83,6 +84,8 @@ public class Registro extends JFrame {
         String cedula = inputCI.getText().trim();
         String pass = new String(inputPassword.getPassword());
         String confirmPass = new String(inputConfirmPassword.getPassword());
+        String email = inputEmail.getText().trim();
+        RolUsuario rol = RolUsuario.EXTERNO;
 
         if (name.isEmpty() || pass.isEmpty() || confirmPass.isEmpty() || lastName.isEmpty() || cedula.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.",
@@ -96,7 +99,7 @@ public class Registro extends JFrame {
             return;
         }
 
-        boolean exito = authService.registrarUsuario(name, lastName, cedula, pass);
+        boolean exito = authService.registrarUsuario(rol, name, lastName, cedula, email, pass);
 
         if (exito) {
             JOptionPane.showMessageDialog(this, "¡Usuario registrado correctamente!",
