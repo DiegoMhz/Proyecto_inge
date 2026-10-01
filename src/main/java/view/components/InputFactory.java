@@ -1,11 +1,16 @@
 package view.components;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.*;
+import java.awt.GridLayout;
 
-public class Inputs {
-    public static JPanel crearCampo(String textoEtiqueta, javax.swing.JComponent componente) {
+public final class InputFactory {
+
+    // Constructor privado para evitar instanciación
+    private InputFactory() {}
+
+    public static JPanel createInputPanel(String textoEtiqueta, JComponent componente) {
         JPanel div = new JPanel(new GridLayout(2, 1));
         JLabel text = new JLabel(textoEtiqueta);
         div.add(text);

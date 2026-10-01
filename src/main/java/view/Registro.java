@@ -1,9 +1,12 @@
 package view;
 
+import static view.components.InputFactory.createInputPanel;
 import model.AutenticacionService;
 import javax.swing.*;
 import java.awt.*;
 import model.RolUsuario;
+import view.components.RadialGradient;
+
 public class Registro extends JFrame {
     private AutenticacionService authService;
     JTextField inputName;
@@ -18,15 +21,6 @@ public class Registro extends JFrame {
         initUI();
     }
 
-    private JPanel crearCampo(String textoEtiqueta, JComponent componente) {
-        JPanel div = new JPanel(new GridLayout(2, 1));
-        JLabel text = new JLabel(textoEtiqueta);
-        componente.putClientProperty("FlatLaf.style", "arc: 10");
-        div.add(text);
-        div.add(componente);
-        return div;
-    }
-
     private void initUI() {
 
         setTitle("Registro de Usuario");
@@ -35,46 +29,50 @@ public class Registro extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Contenedor principal con GridLayout (4 filas, 2 columnas, espacios de 10px)
         JPanel panel = new JPanel(new GridLayout(8, 1, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+        panel.setBackground(new Color(255, 255, 255, 40));
         // 1. Titulo
         JLabel lblTitulo = new JLabel("REGISTRO", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         panel.add(lblTitulo);
         // Input Nombre
         inputName = new JTextField();
-        panel.add(crearCampo("Nombre", inputName));
+        panel.add(createInputPanel("Nombre", inputName));
 
         // Input Apellido
         inputLastName = new JTextField();
-        panel.add(crearCampo("Apellido", inputLastName));
+        panel.add(createInputPanel("Apellido", inputLastName));
 
         // Input NumeroCedula
         inputCI = new JTextField();
-        panel.add(crearCampo("Cedula", inputCI));
+        panel.add(createInputPanel("Cedula", inputCI));
 
         // Input Email
         inputEmail = new JTextField();
-        panel.add(crearCampo("Correo", inputEmail));
+        panel.add(createInputPanel("Correo", inputEmail));
 
         // Input Contraseña
         inputPassword = new JPasswordField();
-        panel.add(crearCampo("Contraseña", inputPassword));
+        panel.add(createInputPanel("Contraseña", inputPassword));
 
         // Input Confirmar Contraseña
         inputConfirmPassword = new JPasswordField();
-        panel.add(crearCampo("Confirmar contraseña", inputConfirmPassword));
+        panel.add(createInputPanel("Confirmar contraseña", inputConfirmPassword));
 
         JButton btnRegistrar = new JButton("Registrarme");
         panel.add((btnRegistrar));
 
         btnRegistrar.putClientProperty("FlatLaf.style", "arc: 10");
 
-        // 2. IMPORTANTE: Agregar el panel al JFrame
-        this.add(panel);
+        // PONERLE EL FONDO DEGRADADO CON COLOR
+        RadialGradient background = new RadialGradient();
+        background.setLayout(new GridBagLayout());
+        panel.setPreferredSize(new Dimension(450, 600));
+        this.setContentPane(background);
+        add(panel);
 
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         btnRegistrar.addActionListener(e -> ejecutarRegistro());
     }
 

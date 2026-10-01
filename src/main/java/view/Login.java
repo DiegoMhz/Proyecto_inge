@@ -1,6 +1,6 @@
 package view;
 
-import static view.components.Inputs.crearCampo;
+import static view.components.InputFactory.createInputPanel;
 import view.components.RadialGradient;
 import javax.swing.*;
 import java.awt.*;
@@ -39,11 +39,11 @@ public class Login extends JFrame {
 
         // INPUT CEDULA
         inputCedula = new JTextField();
-        panel.add(crearCampo("Cédula", inputCedula));
+        panel.add(createInputPanel("Cédula", inputCedula));
 
         // INPUT PASSWORD
         inputPassword = new JPasswordField();
-        panel.add(crearCampo("Contraseña", inputPassword));
+        panel.add(createInputPanel("Contraseña", inputPassword));
 
         // CREO UN DIV O CAJA PARA LOS BOTONES
         JPanel div = new JPanel(new GridLayout(2, 1, 0, 10));
@@ -60,6 +60,7 @@ public class Login extends JFrame {
         background.setLayout(new GridBagLayout());
         this.setContentPane(background);
         add(panel);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Registro de eventos mediante lambdas
         btnLogin.addActionListener(e -> ejecutarLogin());
