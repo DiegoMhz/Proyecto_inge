@@ -29,7 +29,7 @@ public class GestorDeFlota{
     }
 
     //Guardar las unidades en el archivo JSON
-    private void guardarEnFlota(){
+    private boolean guardarEnFlota(){
         File carpetaPadre = flota.getParentFile();
         if (carpetaPadre != null && !carpetaPadre.exists()) {
             carpetaPadre.mkdirs();
@@ -37,65 +37,82 @@ public class GestorDeFlota{
         
         try{
             mapper.writerWithDefaultPrettyPrinter().writeValue(flota, unidades);
+            return true;
         } catch (IOException e) {
             System.err.println("Error al guardar la unidad en el archivo: " + e.getMessage());
+            return false;
         }
     }
 
 
     //Registro de unidades
-    public void RegistrarUnidad(String placa, String modelo, int capacidad){
+    public boolean RegistrarUnidad(String placa, String modelo, int capacidad){
+        if(buscarPorPlaca(placa)!=null){
+            System.out.println("ERROR: Ya existe una unidad registrada con la placa: " + placa);
+            return false;
+        }
         String numeroAsignado= "U-" + (unidades.size()+1); //asignarle numero de manera automatica
         UnidadDeTransporte nuevaUnidad= new UnidadDeTransporte(numeroAsignado, placa, modelo, capacidad);
         unidades.add(nuevaUnidad);
         guardarEnFlota();
+        return true;
     }
 
     //Buscar unidad
     public UnidadDeTransporte buscarPorPlaca(String placa){
         for(UnidadDeTransporte unidadActual: unidades){
-            if(unidadActual.getPlaca().equals(placa)){
+            if(unidadActual.getPlaca().equalsIgnoreCase(placa)){
                 return unidadActual;
             }
-
         }
         return null;
     }
 
     //Cambiar estado de la unidad
-    public void cambiarEstado(String placa, EstadoOperativo estado){
+    public boolean cambiarEstado(String placa, EstadoOperativo estado){
         UnidadDeTransporte unidad= buscarPorPlaca(placa);
         if(unidad!=null){
             unidad.setEstadoOperativo(estado);
             guardarEnFlota();
+            return true;
         }else{
             System.out.println("ERROR: No se encontró ningún vehículo con esa placa.");
+            return false;
         }
 
     }
 
      //Editar unidad
-    public void EditarUnidad(String PlacaAbuscar, String nuevaPlaca, String modelo, int capacidad){
+    public boolean EditarUnidad(String PlacaAbuscar, String nuevaPlaca, String modelo, int capacidad){
         UnidadDeTransporte unidad= buscarPorPlaca(PlacaAbuscar);
         if(unidad!=null){
+            UnidadDeTransporte unidadNuevaPlaca= buscarPorPlaca(nuevaPlaca);
+            if(unidadNuevaPlaca!=null && unidadNuevaPlaca!=unidad){
+                System.out.println("ERROR: La nueva placa ya pertenece a otro vehículo.");
+                return false;
+            }
             unidad.setPlaca(nuevaPlaca);
             unidad.setModelo(modelo);
             unidad.setCapacidad_de_pasajeros(capacidad);
             guardarEnFlota();
+            return true;
         }else{
             System.out.println("ERROR: No se encontró ningún vehículo con esa placa.");
+            return false;
         }
     }
 
     //Eliminar unidad
-    public void EliminarUnidad(String Placa){
+    public boolean EliminarUnidad(String Placa){
         UnidadDeTransporte unidad= buscarPorPlaca(Placa);
         if(unidad!=null){
             unidades.remove(unidad);
             guardarEnFlota();
             System.out.println("Unidad eliminada con éxito.");
+            return true;
         }else{
             System.out.println("ERROR: No se encontró ningún vehículo con esa placa.");
+            return false;
         }
     }
 
