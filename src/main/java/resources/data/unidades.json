@@ -4,4 +4,11 @@
   "modelo" : "Encava Especial",
   "capacidad_de_pasajeros" : 35,
   "estadoOperativo" : "activo"
+},
+{
+  "numeroAsignado" : "U-2",
+  "placa" : "UCV",
+  "modelo" : "Encava Especial",
+  "capacidad_de_pasajeros" : 35,
+  "estadoOperativo" : "activo"
 } ]

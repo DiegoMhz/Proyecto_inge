@@ -1,26 +1,27 @@
 [ {
-  "id" : "01",
+  "id" : "DSA",
   "ruta" : {
-    "nombreRuta" : "caraca losteque",
-    "origen" : "caraca",
-    "destino" : "losteque",
-    "tipoRuta" : "EXTRAURBANA",
-    "paradas" : [ "vallecoche" ]
+    "nombreRuta" : "DSA",
+    "origen" : "DAS",
+    "destino" : "DSA",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ "ASDSA" ]
   },
   "unidad" : {
-    "numeroAsignado" : "6",
-    "placa" : "7",
-    "modelo" : "mercedes",
-    "capacidad" : 67,
-    "estadoOperativo" : "activo"
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV-101-MOD",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
   },
   "conductor" : {
     "rol" : "CONDUCTOR",
-    "name" : "sixsevenaldo",
-    "password" : "67",
-    "lastName" : "dos santos aveiro",
-    "cedula" : "11676767",
-    "correo" : "67aldo@67.siu"
+    "name" : "dasdsa",
+    "password" : "das",
+    "lastName" : "dasd",
+    "cedula" : "312",
+    "correo" : "dsa@gm,ail,com"
   },
   "fechaSalida" : "2026-10-15 08:00",
   "fechaLlegada" : "2026-10-15 09:30"

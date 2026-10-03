@@ -200,12 +200,9 @@ public class ControlItineraios extends JFrame {
                 .toList();
             ruta.setParadas(paradas);
 
-            UnidadDeTransporte unidad = new UnidadDeTransporte(
-                txtUnidadNumero.getText().trim(),
-                txtUnidadPlaca.getText().trim(),
-                txtUnidadModelo.getText().trim(),
-                Integer.parseInt(txtUnidadCapacidad.getText().trim())
-            );
+            UnidadDeTransporte unidad = new UnidadDeTransporte();
+            String placa = txtUnidadPlaca.getText().trim();
+            unidad = unidad.getUnidadDeTransporte(placa);
             unidad.setEstado((EstadoOperativo) cmbEstadoUnidad.getSelectedItem());
 
             Usuario conductor = new Usuario(

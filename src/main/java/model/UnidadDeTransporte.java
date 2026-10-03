@@ -69,4 +69,10 @@ public class UnidadDeTransporte {
    public void setCapacidadDePasajeros(int _capacidad) {
       this.capacidad_de_pasajeros = _capacidad;
    }
+
+   public UnidadDeTransporte getUnidadDeTransporte(String placa) {
+      GestorDeFlota gestor = new GestorDeFlota();
+      UnidadDeTransporte unidad = gestor.buscarPorPlaca(placa);
+      return unidad;
+   }
 }
