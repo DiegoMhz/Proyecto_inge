@@ -1,9 +1,13 @@
 package view;
 
+import java.util.List;
 import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
 import static view.components.Button.createButton;
+import model.GestorDeFlota;
 import model.EstadoOperativo;
+import model.UnidadDeTransporte;
+import view.components.ItemUnidadPanel;
 import view.components.RadialGradient;
 import javax.swing.*;
 import java.awt.*;
@@ -91,37 +95,41 @@ public class GestionDeFlota extends JFrame {
         unidades.add(Box.createVerticalStrut(20));
         unidades.add(listaUnidades);
 
-        JPanel fila = new JPanel(new BorderLayout(10, 0));
-        fila.setOpaque(false);
-        fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); // Controla el alto de la fila
+        GestorDeFlota gestor = new GestorDeFlota();
+        List<UnidadDeTransporte> unidadesAll = gestor.getUnidades();
 
-        
-        JLabel label = createTitlePanel("Placa");
-      
+        for (UnidadDeTransporte unidad : unidadesAll) {
+            JPanel fila = new ItemUnidadPanel(unidad.getPlaca());
+            listaUnidades.add(fila);
+        }
 
-        
-        JPanel panelTexto = new JPanel(new BorderLayout());
-        panelTexto.setBackground(new Color(255, 255, 255, 30));
-        panelTexto.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        panelTexto.add(label, BorderLayout.CENTER);
+        // 1. Crear el JScrollPane
+        JScrollPane scrollPane = new JScrollPane(listaUnidades);
+        scrollPane.setOpaque(false);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        unidades.add(scrollPane);
 
-        // Botones (Editar y Eliminar)
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
-        panelBotones.setOpaque(false);
+        btnRegistro.addActionListener(e -> {
+            String placa = inputPlaca.getText().trim();
+            String modelo = inputModelo.getText().trim();
+            String capacidad = inputCapacidad.getText().trim();
 
-        JButton btnEditar = new JButton("✏");
-        JButton btnEliminar = new JButton("🗑");
+            if (placa.isEmpty() || modelo.isEmpty() || capacidad.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        btnEditar.setFocusable(false);
-        btnEliminar.setFocusable(false);
+            ItemUnidadPanel newItem = new ItemUnidadPanel(placa);
+            listaUnidades.add(newItem);
+            listaUnidades.revalidate();
+            listaUnidades.repaint();
+            GestorDeFlota gestorDeFlota = new GestorDeFlota();
 
-        panelBotones.add(btnEditar);
-        panelBotones.add(btnEliminar);
-
-        fila.add(panelTexto, BorderLayout.CENTER);
-        fila.add(panelBotones, BorderLayout.EAST);
-
-        listaUnidades.add(fila);
+            int capacidadInt = Integer.parseInt(capacidad);
+            gestorDeFlota.RegistrarUnidad(placa, modelo, capacidadInt);
+        });
     }
 
 }
