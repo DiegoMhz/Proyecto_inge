@@ -1,4 +1,6 @@
 import view.Login;
+import view.ControlItineraios;
+
 import javax.swing.SwingUtilities;
 
 import model.GestorDeFlota;
@@ -11,11 +13,12 @@ public class Main {
         // Ejecutar la interfaz gráfica dentro del hilo de eventos de Swing (EDT)
         SwingUtilities.invokeLater(() -> {
             // 1. Instanciar la ventana
-            GestionDeFlota GestionFrame = new GestionDeFlota();
             // Login loginFrame = new Login();
-            // new view.Registro().setVisible(true);
+         //   new view.Registro().setVisible(true);
             // // 2. Hacerla visible en pantalla
-            GestionFrame.setVisible(true);
+            // loginFrame.setVisible(true);
+            ControlItineraios ventana = new ControlItineraios();
+            ventana.setVisible(true);
         });
     }
 }
