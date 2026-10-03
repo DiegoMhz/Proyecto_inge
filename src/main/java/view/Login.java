@@ -16,7 +16,6 @@ public class Login extends JFrame {
 
     private void initUI() {
         // Configuración de la ventana principal
-
         setTitle("Inicio de Sesion");
         setSize(700, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
