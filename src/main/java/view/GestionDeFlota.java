@@ -115,20 +115,35 @@ public class GestionDeFlota extends JFrame {
             String modelo = inputModelo.getText().trim();
             String capacidad = inputCapacidad.getText().trim();
 
+
             if (placa.isEmpty() || modelo.isEmpty() || capacidad.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            ItemUnidadPanel newItem = new ItemUnidadPanel(placa);
-            listaUnidades.add(newItem);
-            listaUnidades.revalidate();
-            listaUnidades.repaint();
+            if(!capacidad.matches("^[0-9]+$")){
+                JOptionPane.showMessageDialog(this, "La capacidad debe ser un número entero.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             GestorDeFlota gestorDeFlota = new GestorDeFlota();
 
             int capacidadInt = Integer.parseInt(capacidad);
-            gestorDeFlota.RegistrarUnidad(placa, modelo, capacidadInt);
+            boolean exito = gestorDeFlota.RegistrarUnidad(placa, modelo, capacidadInt);
+
+            if (exito) {
+                ItemUnidadPanel newItem = new ItemUnidadPanel(placa);
+                listaUnidades.add(newItem);
+                listaUnidades.revalidate();
+                listaUnidades.repaint();
+                JOptionPane.showMessageDialog(this, "Unidad registrada con éxito.", "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Ya existe una unidad registrada con la placa: " + placa, "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
         });
     }
 
