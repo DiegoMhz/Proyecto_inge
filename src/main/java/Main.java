@@ -1,8 +1,8 @@
 import view.Login;
+import view.ControlItineraios;
+
 import javax.swing.SwingUtilities;
 // import com.formdev.flatlaf.FlatDarkLaf;
-
-import model.VentanaItinerarios;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,7 +14,7 @@ public class Main {
          //   new view.Registro().setVisible(true);
             // // 2. Hacerla visible en pantalla
             // loginFrame.setVisible(true);
-            VentanaItinerarios ventana = new VentanaItinerarios();
+            ControlItineraios ventana = new ControlItineraios();
             ventana.setVisible(true);
         });
     }

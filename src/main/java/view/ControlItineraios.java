@@ -1,12 +1,22 @@
-package model;
+package view;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import model.ControlDeItinerario;
+import model.EstadoOperativo;
+import model.ItinerarioService;
+import model.RolUsuario;
+import model.Ruta;
+import model.UnidadDeTransporte;
+import model.Usuario;
+import model.Ruta.TipoRuta;
+
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class VentanaItinerarios extends JFrame {
+public class ControlItineraios extends JFrame {
 
     private final ItinerarioService servicio;
 
@@ -24,7 +34,7 @@ public class VentanaItinerarios extends JFrame {
     private JTable tablaItinerarios;
     private DefaultTableModel modeloTabla;
 
-    public VentanaItinerarios() {
+    public ControlItineraios() {
         this.servicio = new ItinerarioService();
 
         setTitle("Gestión de Control de Itinerarios - SGT");
@@ -95,16 +105,16 @@ public class VentanaItinerarios extends JFrame {
 
         panelForm.add(new JLabel("--- UNIDAD DE TRANSPORTE ---"));
         panelForm.add(new JLabel(""));
-        panelForm.add(new JLabel("Número asignado:"));
-        panelForm.add(txtUnidadNumero);
+        // panelForm.add(new JLabel("Número asignado:"));
+        // panelForm.add(txtUnidadNumero);
         panelForm.add(new JLabel("Placa:"));
         panelForm.add(txtUnidadPlaca);
-        panelForm.add(new JLabel("Modelo:"));
-        panelForm.add(txtUnidadModelo);
-        panelForm.add(new JLabel("Capacidad de pasajeros:"));
-        panelForm.add(txtUnidadCapacidad);
-        panelForm.add(new JLabel("Estado operativo:"));
-        panelForm.add(cmbEstadoUnidad);
+        // panelForm.add(new JLabel("Modelo:"));
+        // panelForm.add(txtUnidadModelo);
+        // panelForm.add(new JLabel("Capacidad de pasajeros:"));
+        // panelForm.add(txtUnidadCapacidad);
+        // panelForm.add(new JLabel("Estado operativo:"));
+        // panelForm.add(cmbEstadoUnidad);
 
         panelForm.add(new JLabel("--- CONDUCTOR ---"));
         panelForm.add(new JLabel(""));
@@ -272,6 +282,6 @@ public class VentanaItinerarios extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new VentanaItinerarios().setVisible(true));
+        SwingUtilities.invokeLater(() -> new ControlItineraios().setVisible(true));
     }
 }
