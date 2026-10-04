@@ -5,7 +5,6 @@ import static view.components.InputFactory.createInputPanel;
 import view.components.RadialGradient;
 import javax.swing.*;
 import java.awt.*;
-import view.AdminHome;
 
 public class Login extends JFrame {
     private JTextField inputCedula;
