@@ -10,11 +10,11 @@ import model.RolUsuario;
 import model.Ruta;
 import model.UnidadDeTransporte;
 import model.Usuario;
-import model.Ruta.TipoRuta;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class ControlItineraios extends JFrame {
 
@@ -28,7 +28,7 @@ public class ControlItineraios extends JFrame {
     private JComboBox<EstadoOperativo> cmbEstadoUnidad;
     private JTextField txtConductorNombre, txtConductorApellido, txtConductorCedula, txtConductorCorreo;
     private JPasswordField txtConductorPassword;
-    private JTextField txtFechaSalida, txtFechaLlegada;
+    private JTextField txtHoraSalida, txtHoraLlegada;
 
     // Componentes de la Tabla
     private JTable tablaItinerarios;
@@ -55,6 +55,7 @@ public class ControlItineraios extends JFrame {
         });
 
         add(tabbedPane);
+        cargarDatosTabla();
     }
 
     /**
@@ -67,7 +68,8 @@ public class ControlItineraios extends JFrame {
         JPanel panelForm = new JPanel(new GridLayout(0, 2, 8, 8));
 
         // Campos del formulario
-        txtId = new JTextField();
+        txtId = new JTextField(servicio.obtenerSiguienteId());
+        txtId.setEditable(false);
         txtRutaNombre = new JTextField();
         txtRutaOrigen = new JTextField();
         txtRutaDestino = new JTextField();
@@ -83,12 +85,17 @@ public class ControlItineraios extends JFrame {
         txtConductorCedula = new JTextField();
         txtConductorCorreo = new JTextField();
         txtConductorPassword = new JPasswordField();
-        txtFechaSalida = new JTextField("2026-10-15 08:00");
-        txtFechaLlegada = new JTextField("2026-10-15 09:30");
+        txtHoraSalida = new JTextField("08:00");
+        txtHoraLlegada = new JTextField("09:30");
 
         // Agregar etiquetas y campos
         panelForm.add(new JLabel("ID Itinerario:"));
         panelForm.add(txtId);
+
+        panelForm.add(new JLabel("--- UNIDAD DE TRANSPORTE ---"));
+        panelForm.add(new JLabel(""));
+        panelForm.add(new JLabel("Placa:"));
+        panelForm.add(txtUnidadPlaca);
 
         panelForm.add(new JLabel("--- RUTA ---"));
         panelForm.add(new JLabel(""));
@@ -102,19 +109,6 @@ public class ControlItineraios extends JFrame {
         panelForm.add(cmbTipoRuta);
         panelForm.add(new JLabel("Paradas (separadas por comas):"));
         panelForm.add(txtParadas);
-
-        panelForm.add(new JLabel("--- UNIDAD DE TRANSPORTE ---"));
-        panelForm.add(new JLabel(""));
-        // panelForm.add(new JLabel("Número asignado:"));
-        // panelForm.add(txtUnidadNumero);
-        panelForm.add(new JLabel("Placa:"));
-        panelForm.add(txtUnidadPlaca);
-        // panelForm.add(new JLabel("Modelo:"));
-        // panelForm.add(txtUnidadModelo);
-        // panelForm.add(new JLabel("Capacidad de pasajeros:"));
-        // panelForm.add(txtUnidadCapacidad);
-        // panelForm.add(new JLabel("Estado operativo:"));
-        // panelForm.add(cmbEstadoUnidad);
 
         panelForm.add(new JLabel("--- CONDUCTOR ---"));
         panelForm.add(new JLabel(""));
@@ -131,10 +125,10 @@ public class ControlItineraios extends JFrame {
 
         panelForm.add(new JLabel("--- HORARIOS ---"));
         panelForm.add(new JLabel(""));
-        panelForm.add(new JLabel("Fecha/Hora Salida:"));
-        panelForm.add(txtFechaSalida);
-        panelForm.add(new JLabel("Fecha/Hora Llegada Estimada:"));
-        panelForm.add(txtFechaLlegada);
+        panelForm.add(new JLabel("Salida (HH:mm):"));
+        panelForm.add(txtHoraSalida);
+        panelForm.add(new JLabel("Llegada Estimada (HH:mm):"));
+        panelForm.add(txtHoraLlegada);
 
         // Botón Guardar
         JButton btnGuardar = new JButton("Guardar Itinerario");
@@ -143,7 +137,10 @@ public class ControlItineraios extends JFrame {
         btnGuardar.setForeground(Color.WHITE);
         btnGuardar.addActionListener(e -> procesarGuardado());
 
-        panelPrincipal.add(new JScrollPane(panelForm), BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(panelForm);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); 
+
+        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
         panelPrincipal.add(btnGuardar, BorderLayout.SOUTH);
 
         return panelPrincipal;
@@ -166,6 +163,7 @@ public class ControlItineraios extends JFrame {
 
         tablaItinerarios = new JTable(modeloTabla);
         JScrollPane scrollPane = new JScrollPane(tablaItinerarios);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         JButton btnRefrescar = new JButton("Actualizar Tabla");
         btnRefrescar.addActionListener(e -> cargarDatosTabla());
@@ -181,10 +179,10 @@ public class ControlItineraios extends JFrame {
      */
     private void procesarGuardado() {
         try {
-            String salida = txtFechaSalida.getText().trim();
-            String llegada = txtFechaLlegada.getText().trim();
-            if (txtId.getText().trim().isEmpty() || salida.isEmpty() || llegada.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El ID y las horas son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            String salida = txtHoraSalida.getText().trim();
+            String llegada = txtHoraLlegada.getText().trim();
+            if (salida.isEmpty() || llegada.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La salida y llegada estimada son obligatorias.", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -215,17 +213,25 @@ public class ControlItineraios extends JFrame {
             );
 
             ControlDeItinerario nuevoItinerario = new ControlDeItinerario(
-                txtId.getText().trim(), ruta, unidad, conductor, salida, llegada
+                null, ruta, unidad, conductor, salida, llegada
             );
+
+            Optional<String> conflicto = servicio.validarConflictoHorario(nuevoItinerario);
+            if (conflicto.isPresent()) {
+                JOptionPane.showMessageDialog(this, conflicto.get(), "Horario inválido o en conflicto", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
             // Persistencia en JSON
             boolean exito = servicio.agregarItinerario(nuevoItinerario);
 
             if (exito) {
-                JOptionPane.showMessageDialog(this, "¡Itinerario guardado exitosamente en JSON!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "¡Itinerario " + nuevoItinerario.getId()
+                    + " guardado exitosamente en JSON!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 limpiarFormulario();
+                cargarDatosTabla();
             } else {
-                JOptionPane.showMessageDialog(this, "No se pudo guardar. Verifique si el ID ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No se pudo guardar el itinerario.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception ex) {
@@ -262,7 +268,7 @@ public class ControlItineraios extends JFrame {
     }
 
     private void limpiarFormulario() {
-        txtId.setText("");
+        txtId.setText(servicio.obtenerSiguienteId());
         txtRutaNombre.setText("");
         txtRutaOrigen.setText("");
         txtRutaDestino.setText("");

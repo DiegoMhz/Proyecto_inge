@@ -1,15 +1,15 @@
 [ {
-  "id" : "DSA",
+  "id" : "01",
   "ruta" : {
-    "nombreRuta" : "DSA",
-    "origen" : "DAS",
-    "destino" : "DSA",
-    "tipoRuta" : "URBANA",
-    "paradas" : [ "ASDSA" ]
+    "nombreRuta" : "adad",
+    "origen" : "adadd",
+    "destino" : "ada",
+    "tipoRuta" : "EXTRAURBANA",
+    "paradas" : [ "adadaad" ]
   },
   "unidad" : {
     "numeroAsignado" : "U-2",
-    "placa" : "UCV-101-MOD",
+    "placa" : "UCV",
     "modelo" : "Encava Especial",
     "capacidad_de_pasajeros" : 35,
     "estadoOperativo" : "activo",
@@ -17,12 +17,174 @@
   },
   "conductor" : {
     "rol" : "CONDUCTOR",
-    "name" : "dasdsa",
-    "password" : "das",
-    "lastName" : "dasd",
-    "cedula" : "312",
-    "correo" : "dsa@gm,ail,com"
+    "name" : "sfe",
+    "password" : "adada",
+    "lastName" : "saf",
+    "cedula" : "32",
+    "correo" : "awda"
   },
-  "fechaSalida" : "2026-10-15 08:00",
-  "fechaLlegada" : "2026-10-15 09:30"
+  "fechaSalida" : "08:00",
+  "fechaLlegada" : "09:30"
+}, {
+  "id" : "02",
+  "ruta" : {
+    "nombreRuta" : "skibiditoilet",
+    "origen" : "skibidi",
+    "destino" : "toilet",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ "quisiera", "ser", "una", "mosca", "para", "pararme", "en", "tu", "pieeel" ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "elbo",
+    "password" : "111",
+    "lastName" : "lasgordas",
+    "cedula" : "444",
+    "correo" : "777"
+  },
+  "fechaSalida" : "08:00",
+  "fechaLlegada" : "09:30"
+}, {
+  "id" : "03",
+  "ruta" : {
+    "nombreRuta" : "papapapa",
+    "origen" : "pipi",
+    "destino" : "popo",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ "pepe" ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "elmo",
+    "password" : "123",
+    "lastName" : "coso",
+    "cedula" : "12345678",
+    "correo" : "citrico"
+  },
+  "fechaSalida" : "09:30",
+  "fechaLlegada" : "09:31"
+}, {
+  "id" : "04",
+  "ruta" : {
+    "nombreRuta" : "adada",
+    "origen" : "awdawwww",
+    "destino" : "awda",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ "asda" ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "null",
+    "password" : "",
+    "lastName" : "",
+    "cedula" : "",
+    "correo" : ""
+  },
+  "fechaSalida" : "18:02",
+  "fechaLlegada" : "19:30"
+}, {
+  "id" : "05",
+  "ruta" : {
+    "nombreRuta" : "pongor",
+    "origen" : "piolin",
+    "destino" : "las adjuntas",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ "infierno" ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "null",
+    "password" : "",
+    "lastName" : "",
+    "cedula" : "",
+    "correo" : ""
+  },
+  "fechaSalida" : "16:02",
+  "fechaLlegada" : "17:30"
+}, {
+  "id" : "06",
+  "ruta" : {
+    "nombreRuta" : "",
+    "origen" : "",
+    "destino" : "",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "elmer",
+    "password" : "",
+    "lastName" : "cenario",
+    "cedula" : "123",
+    "correo" : "123@gmail.com"
+  },
+  "fechaSalida" : "06:02",
+  "fechaLlegada" : "07:30"
+}, {
+  "id" : "07",
+  "ruta" : {
+    "nombreRuta" : "",
+    "origen" : "",
+    "destino" : "",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "nosoymercenario",
+    "password" : "",
+    "lastName" : "lojuro",
+    "cedula" : "123",
+    "correo" : "123@gmail.com"
+  },
+  "fechaSalida" : "12:02",
+  "fechaLlegada" : "12:30"
 } ]

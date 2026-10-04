@@ -62,6 +62,10 @@ public class UnidadDeTransporte {
       return capacidad_de_pasajeros;
    }
 
+   public void setCapacidad(int capacidad) {
+      this.capacidad_de_pasajeros = capacidad;
+   }
+
    public void setEstado(EstadoOperativo _estado) {
       this.estado = _estado;
    }
