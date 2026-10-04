@@ -5,12 +5,8 @@ import static view.components.Title.createTitlePanel;
 import view.components.CustomIconButton;
 import view.components.RadialGradient;
 
-import javax.sound.sampled.Control;
 import javax.swing.*;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.None;
-
-import model.ControlDeItinerario;
 
 import java.awt.*;
 
