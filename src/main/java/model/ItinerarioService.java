@@ -116,7 +116,7 @@ public class ItinerarioService {
                 return Optional.of("El conductor ya tiene un itinerario a esa hora.");
             }
             if (mismaUnidad) {
-                return Optional.of("La unidad o placa ya está asignada a un itinerario a esa hora.");
+                return Optional.of("La Unidad de Transporte ya está asignada a un itinerario a esa hora.");
             }
         }
 
