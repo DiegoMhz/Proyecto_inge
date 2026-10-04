@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutenticacionService {
-    private static final String RUTA_JSON = "src/main/java/resource/data/usuarios.json";
+    private static final String RUTA_JSON = "src/main/resources/data/usuarios.json";
     private final ObjectMapper mapper = new ObjectMapper();
 
     // Cargar usuarios existentes desde el archivo JSON

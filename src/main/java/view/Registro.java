@@ -101,6 +101,7 @@ public class Registro extends JFrame {
         if (exito) {
             JOptionPane.showMessageDialog(this, "¡Usuario registrado correctamente!",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            new Login().setVisible(true);
             this.dispose(); // Cierra la ventana de registro
         } else {
             JOptionPane.showMessageDialog(this, "El nombre de usuario ya existe.",

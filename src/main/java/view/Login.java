@@ -1,10 +1,11 @@
 package view;
+
 import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
 import view.components.RadialGradient;
 import javax.swing.*;
 import java.awt.*;
-
+import view.AdminHome;
 
 public class Login extends JFrame {
     private JTextField inputCedula;
@@ -26,7 +27,7 @@ public class Login extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         panel.setPreferredSize(new Dimension(420, 350));
-        panel.setBackground(new Color(255, 255, 255, 40)); 
+        panel.setBackground(new Color(255, 255, 255, 40));
 
         // TITULO
         JLabel title = createTitlePanel("INICIO DE SESION");
@@ -73,8 +74,8 @@ public class Login extends JFrame {
             JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Atención",
                     JOptionPane.WARNING_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Datos capturados correctamente para: " + cedula, "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+            new AdminHome().setVisible(true);
+            this.dispose();
         }
     }
 }

@@ -1,13 +1,15 @@
 [ {
-  "usuario" : "se",
-  "password" : "se"
+  "rol" : "EXTERNO",
+  "name" : "DD",
+  "password" : "secreto12",
+  "lastName" : "DDD",
+  "cedula" : "30926327",
+  "correo" : "dibzz456@gmail.com"
 }, {
-  "usuario" : "Diego",
-  "password" : "se"
-}, {
-  "usuario" : "Nahomy",
-  "password" : "123"
-}, {
-  "usuario" : "Maria",
-  "password" : "12"
+  "rol" : "EXTERNO",
+  "name" : "Diego",
+  "password" : "secreto12",
+  "lastName" : "Hidalgo",
+  "cedula" : "3092632",
+  "correo" : "dibzz456@gmail.com"
 } ]

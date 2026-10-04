@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class GestorDeFlota{
     private List<UnidadDeTransporte> unidades;
-    private final File flota= new File("src/main/java/resources/data/unidades.json");
+    private final File flota= new File("src/main/resources/data/unidades.json");
     private final ObjectMapper mapper= new ObjectMapper();
     
     public GestorDeFlota(){
