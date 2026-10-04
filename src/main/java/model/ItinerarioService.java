@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ItinerarioService {
 
-    private static final String RUTA_ARCHIVO = "src/main/java/resources/data/itinerarios.json";
+    private static final String RUTA_ARCHIVO = "src/main/resources/data/itinerarios.json";
     private static final Pattern PATRON_HORA = Pattern.compile("(?:[01]\\d|2[0-3]):[0-5]\\d");
     private final File archivo;
     private final ObjectMapper mapper;
