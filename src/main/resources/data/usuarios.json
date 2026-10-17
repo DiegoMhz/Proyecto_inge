@@ -12,4 +12,25 @@
   "lastName" : "Hidalgo",
   "cedula" : "3092632",
   "correo" : "dibzz456@gmail.com"
+}, {
+  "rol" : "EXTERNO",
+  "name" : "awd",
+  "password" : "ad",
+  "lastName" : "adw",
+  "cedula" : "wd",
+  "correo" : "awd"
+}, {
+  "rol" : "CONDUCTOR",
+  "name" : "awd",
+  "password" : "awd",
+  "lastName" : "awd",
+  "cedula" : "awd",
+  "correo" : "ad"
+}, {
+  "rol" : "EXTERNO",
+  "name" : "j",
+  "password" : "l",
+  "lastName" : "k",
+  "cedula" : "k",
+  "correo" : "jbhj"
 } ]

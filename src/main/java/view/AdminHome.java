@@ -13,6 +13,7 @@ import java.awt.*;
 public class AdminHome extends JFrame {
         private CustomIconButton btnGestionUnidades;
         private CustomIconButton btnGestionFlota;
+        private CustomIconButton btnRegistro;
         // private CustomIconButton btnGestionRutas;
         // private CustomIconButton btnGestionReportes;
 
@@ -39,10 +40,27 @@ public class AdminHome extends JFrame {
 
                 // PONERLE EL FONDO DEGRADADO CON COLOR
                 RadialGradient background = new RadialGradient();
-                background.setLayout(new GridBagLayout());
-                background.setBorder(BorderFactory.createEmptyBorder(40, 200, 40, 200));
+                background.setLayout(new BorderLayout(0, 30));
                 this.setContentPane(background);
-                background.add(panel);
+
+                JPanel panelRegistro = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+                panelRegistro.setOpaque(false);
+                panelRegistro.setBorder(BorderFactory.createEmptyBorder(60, 0, 0, 0));
+                btnRegistro = new CustomIconButton(
+                                "Registro de Admin/Conductor");
+                btnRegistro.setFont(new Font("SansSerif", Font.BOLD, 16));
+                btnRegistro.setPreferredSize(new Dimension(300, 70));
+                btnRegistro.setMinimumSize(new Dimension(300, 70));
+                btnRegistro.setMaximumSize(new Dimension(300, 70));
+
+                panelRegistro.add(btnRegistro);
+                background.add(panelRegistro, BorderLayout.NORTH);
+
+                JPanel panelContenido = new JPanel(new GridBagLayout());
+                panelContenido.setOpaque(false);
+                panelContenido.setBorder(BorderFactory.createEmptyBorder(40, 200, 40, 200));
+                background.add(panelContenido, BorderLayout.CENTER);
+                panelContenido.add(panel);
 
                 // TITULO
                 JLabel title = createTitlePanel("Panel de Administración");
@@ -77,6 +95,11 @@ public class AdminHome extends JFrame {
 
                 btnGestionUnidades.addActionListener(e -> {
                         new GestionDeFlota().setVisible(true);
+                        this.dispose();
+                });
+
+                btnRegistro.addActionListener(e -> {
+                        new Registro(true).setVisible(true);
                         this.dispose();
                 });
 
