@@ -2,8 +2,9 @@ package view;
 
 import static view.components.Title.createTitlePanel;
 
+import model.entities.ControlDeItinerario;
 import model.entities.Ruta;
-import model.services.RutaService;
+import model.services.ItinerarioService;
 import view.components.RadialGradient;
 
 import javax.swing.*;
@@ -12,17 +13,17 @@ import java.util.List;
 
 public class RutasExtraUrbanas extends JFrame {
 
-    private final RutaService rutaService;
+    private final ItinerarioService itinerarioService;
     private JPanel panelLista;
 
     public RutasExtraUrbanas() {
-        this.rutaService = new RutaService();
+        this.itinerarioService = new ItinerarioService();
         initUI();
-        cargarRutas();
+        cargarItinerarios();
     }
 
     private void initUI() {
-        setTitle("Rutas Extraurbanas");
+        setTitle("Itinerarios - Rutas Urbanas");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -30,14 +31,14 @@ public class RutasExtraUrbanas extends JFrame {
         // Panel contenedor central
         JPanel panelContenedor = new JPanel(new BorderLayout(15, 15));
         panelContenedor.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
-        panelContenedor.setBackground(new Color(255, 255, 255, 30)); // Transparencia suave[cite: 4]
+        panelContenedor.setBackground(new Color(255, 255, 255, 30));
         panelContenedor.setPreferredSize(new Dimension(500, 550));
 
         // --- ENCABEZADO ---
         JPanel panelTop = new JPanel(new BorderLayout());
         panelTop.setOpaque(false);
 
-        JLabel title = createTitlePanel("RUTAS EXTRAURBANAS");
+        JLabel title = createTitlePanel("RUTAS URBANAS");
         JButton btnVolver = new JButton("🏠");
         btnVolver.setFocusPainted(false);
 
@@ -73,7 +74,7 @@ public class RutasExtraUrbanas extends JFrame {
 
         panelContenedor.add(panelNorteCompleto, BorderLayout.NORTH);
 
-        // --- LISTA DE RUTAS ---
+        // --- LISTA DE ITINERARIOS ---
         panelLista = new JPanel();
         panelLista.setLayout(new BoxLayout(panelLista, BoxLayout.Y_AXIS));
         panelLista.setOpaque(false);
@@ -84,8 +85,7 @@ public class RutasExtraUrbanas extends JFrame {
         scroll.getViewport().setOpaque(false);
         scroll.setBorder(null);
 
-        // Panel wrapper para forzar que los elementos se alineen ARRIBA y no se
-        // desparramen
+        // Panel wrapper para forzar que los elementos se alineen ARRIBA
         JPanel panelScrollWrapper = new JPanel(new BorderLayout());
         panelScrollWrapper.setOpaque(false);
         panelScrollWrapper.add(scroll, BorderLayout.NORTH);
@@ -94,27 +94,31 @@ public class RutasExtraUrbanas extends JFrame {
 
         // --- CONFIGURAR FONDO DEGRADADO ---
         RadialGradient background = new RadialGradient();
-        background.setLayout(new GridBagLayout()); // Centra el tarjeta en pantalla completa[cite: 4]
+        background.setLayout(new GridBagLayout());
 
         this.setContentPane(background);
         add(panelContenedor);
 
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximizado si lo deseas
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    private void cargarRutas() {
+    private void cargarItinerarios() {
         panelLista.removeAll();
-        List<Ruta> rutas = rutaService.obtenerRutasPorTipo(Ruta.TipoRuta.EXTRAURBANA);
+        
+        // Obtener todos los itinerarios del archivo JSON y filtrar solo los de tipo URBANA
+        List<ControlDeItinerario> itinerarios = itinerarioService.obtenerTodos().stream()
+                .filter(it -> it.getRuta() != null && it.getRuta().getTipoRuta() == Ruta.TipoRuta.EXTRAURBANA)
+                .toList();
 
-        if (rutas == null || rutas.isEmpty()) {
-            JLabel lblVacio = new JLabel("No hay rutas registradas.", SwingConstants.CENTER);
+        if (itinerarios == null || itinerarios.isEmpty()) {
+            JLabel lblVacio = new JLabel("No hay itinerarios programados para rutas urbanas.", SwingConstants.CENTER);
             lblVacio.setForeground(Color.WHITE);
             lblVacio.setFont(new Font("SansSerif", Font.ITALIC, 14));
             panelLista.add(lblVacio);
         } else {
-            for (Ruta r : rutas) {
-                panelLista.add(crearFilaRuta(r));
-                panelLista.add(Box.createVerticalStrut(10)); // Espaciado constante entre tarjetas
+            for (ControlDeItinerario it : itinerarios) {
+                panelLista.add(crearFilaItinerario(it));
+                panelLista.add(Box.createVerticalStrut(10));
             }
         }
 
@@ -122,17 +126,18 @@ public class RutasExtraUrbanas extends JFrame {
         panelLista.repaint();
     }
 
-    private JPanel crearFilaRuta(Ruta ruta) {
-
+    private JPanel crearFilaItinerario(ControlDeItinerario it) {
         JPanel fila = new JPanel(new BorderLayout(10, 0));
         fila.setBackground(new Color(255, 255, 255, 45));
         fila.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-
         fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 48));
 
-        // Nombre de la ruta
-        String nombre = ruta.getNombreRuta();
-        JLabel lblNombre = new JLabel(nombre);
+        // Nombre de la ruta tomada desde el objeto ControlDeItinerario
+        String nombreRuta = (it.getRuta() != null && it.getRuta().getNombreRuta() != null)
+                ? it.getRuta().getNombreRuta()
+                : "Ruta Sin Nombre";
+
+        JLabel lblNombre = new JLabel(nombreRuta);
         lblNombre.setForeground(Color.WHITE);
         lblNombre.setFont(new Font("SansSerif", Font.BOLD, 14));
 
@@ -140,7 +145,7 @@ public class RutasExtraUrbanas extends JFrame {
         JButton btnVer = new JButton("Ver");
         btnVer.setPreferredSize(new Dimension(75, 28));
         btnVer.setFocusPainted(false);
-        btnVer.addActionListener(e -> verDetalleRuta(ruta));
+        btnVer.addActionListener(e -> verDetalleItinerario(it));
 
         fila.add(lblNombre, BorderLayout.WEST);
         fila.add(btnVer, BorderLayout.EAST);
@@ -148,21 +153,40 @@ public class RutasExtraUrbanas extends JFrame {
         return fila;
     }
 
-    private void verDetalleRuta(Ruta ruta) {
-        String mensaje = "Origen: " + ruta.getOrigen() + "\n"
-                + "Destino: " + ruta.getDestino() + "\n"
-                + "Tipo: " + ruta.getTipoRuta() + "\n\n"
-                + "Paradas:\n";
+    private void verDetalleItinerario(ControlDeItinerario it) {
+        Ruta r = it.getRuta();
 
-        if (ruta.getParadas() != null && !ruta.getParadas().isEmpty()) {
-            for (String p : ruta.getParadas()) {
-                mensaje += "- " + p + "\n";
+        String origen = (r != null && r.getOrigen() != null) ? r.getOrigen() : "N/A";
+        String destino = (r != null && r.getDestino() != null) ? r.getDestino() : "N/A";
+        String conductor = (it.getConductor() != null && it.getConductor().getName() != null)
+                ? it.getConductor().getName()
+                : "No asignado";
+        String unidad = (it.getUnidad() != null && it.getUnidad().getPlaca() != null)
+                ? it.getUnidad().getPlaca()
+                : "No asignada";
+        String salida = (it.getFechaSalida() != null) ? it.getFechaSalida() : "N/A";
+        String llegada = (it.getFechaLlegada() != null) ? it.getFechaLlegada() : "N/A";
+
+        StringBuilder mensaje = new StringBuilder();
+        mensaje.append("📌 Origen: ").append(origen).append("\n");
+        mensaje.append("🏁 Destino: ").append(destino).append("\n");
+        mensaje.append("👤 Conductor: ").append(conductor).append("\n");
+        mensaje.append("🚌 Unidad (Placa): ").append(unidad).append("\n");
+        mensaje.append("⏰ Hora de Salida: ").append(salida).append("\n");
+        mensaje.append("⏳ Llegada Estimada: ").append(llegada).append("\n\n");
+
+        mensaje.append("🚏 Paradas:\n");
+        if (r != null && r.getParadas() != null && !r.getParadas().isEmpty()) {
+            for (String p : r.getParadas()) {
+                mensaje.append("  • ").append(p).append("\n");
             }
         } else {
-            mensaje += "(Sin paradas intermedias)";
+            mensaje.append("  (Sin paradas intermedias)");
         }
 
-        JOptionPane.showMessageDialog(this, mensaje, "Detalle: " + ruta.getNombreRuta(),
+        String tituloVentana = (r != null && r.getNombreRuta() != null) ? r.getNombreRuta() : "Itinerario";
+
+        JOptionPane.showMessageDialog(this, mensaje.toString(), "Detalle del Itinerario: " + tituloVentana,
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
