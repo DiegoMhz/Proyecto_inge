@@ -44,4 +44,10 @@ public class RutaService {
         return new DefaultComboBoxModel<>(rutasFiltradas.toArray(new Ruta[0]));
     }
 
+    public List<Ruta> obtenerRutasPorTipo(Ruta.TipoRuta tipo) {
+        return obtenerTodasLasRutas().stream()
+                .filter(r -> r.getTipoRuta() == tipo)
+                .toList();
+    }
+
 }
