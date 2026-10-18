@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class GestorDeTicket {
     private List<Ticket> tickets;
-    private final File archivoTickets = new File("src/main/java/resource/data/tickets.json");
+    private final File archivoTickets = new File("src/main/resources/data/tickets.json");
     private final ObjectMapper mapper = new ObjectMapper();
     private GestorMonedero gestorMonederos;
 

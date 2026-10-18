@@ -40,6 +40,26 @@ public class AutenticacionService {
         return null;
     }
 
+    public Usuario login(String cedulaOCorreo, String password) {
+        if (cedulaOCorreo == null || password == null) {
+            return null;
+        }
+
+        List<Usuario> usuarios = obtenerUsuarios();
+
+        for (Usuario u : usuarios) {
+            boolean coincideCedula = u.getCedula() != null && u.getCedula().equalsIgnoreCase(cedulaOCorreo.trim());
+            boolean coincideCorreo = u.getCorreo() != null && u.getCorreo().equalsIgnoreCase(cedulaOCorreo.trim());
+            boolean coincidePassword = u.getPassword() != null && u.getPassword().equals(password.trim());
+
+            if ((coincideCedula || coincideCorreo) && coincidePassword) {
+                return u; // Retorna el usuario logueado
+            }
+        }
+
+        return null; // Credenciales inválidas
+    }
+
     // Registrar un nuevo usuario en el JSON
     public boolean registrarUsuario(RolUsuario rol, String name, String lastName, String cedula, String correo,
             String password) {

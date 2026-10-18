@@ -12,10 +12,12 @@ public class UsuarioHome extends JFrame {
 
     private CustomIconButton btnRutasUrbanas;
     private CustomIconButton btnRutasExtraurbanas;
+    private CustomIconButton btnRecargar;
 
     public UsuarioHome() {
         initUI();
     }
+    
 
     private void initUI() {
         // Configuración básica de la ventana
@@ -63,9 +65,14 @@ public class UsuarioHome extends JFrame {
                 "icons/circulo.png" // Ajusta a la ruta de tu ícono
         );
 
+        btnRecargar = new CustomIconButton(
+                "<html><center>Recargar</center></html>",
+                "icons/circulo.png" // Ajusta a la ruta de tu ícono
+        );
+
         panelBotones.add(btnRutasUrbanas);
         panelBotones.add(btnRutasExtraurbanas);
-
+        panelBotones.add(btnRecargar);
         panelTarjeta.add(panelBotones);
 
         // Agregar la tarjeta centrada al fondo
@@ -79,6 +86,11 @@ public class UsuarioHome extends JFrame {
 
         btnRutasExtraurbanas.addActionListener(e -> {
             new RutasExtraUrbanas().setVisible(true);
+            this.dispose();
+        });
+
+        btnRecargar.addActionListener(e -> {
+            new RecargaPagoMovil().setVisible(true);
             this.dispose();
         });
     }

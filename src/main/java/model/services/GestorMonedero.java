@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GestorMonedero{
     private List<Monedero> monederos;
-    private final File archivoMonederos = new File("src/main/java/resource/data/monederos.json");
+    private final File archivoMonederos = new File("src/main/resources/data/monederos.json");
     private final ObjectMapper mapper = new ObjectMapper();
 
     public GestorMonedero() {

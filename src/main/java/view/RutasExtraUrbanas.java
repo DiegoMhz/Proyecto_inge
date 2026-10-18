@@ -38,7 +38,7 @@ public class RutasExtraUrbanas extends JFrame {
         JPanel panelTop = new JPanel(new BorderLayout());
         panelTop.setOpaque(false);
 
-        JLabel title = createTitlePanel("RUTAS URBANAS");
+        JLabel title = createTitlePanel("RUTAS EXTRAURBANAS");
         JButton btnVolver = new JButton("🏠");
         btnVolver.setFocusPainted(false);
 
@@ -111,7 +111,7 @@ public class RutasExtraUrbanas extends JFrame {
                 .toList();
 
         if (itinerarios == null || itinerarios.isEmpty()) {
-            JLabel lblVacio = new JLabel("No hay itinerarios programados para rutas urbanas.", SwingConstants.CENTER);
+            JLabel lblVacio = new JLabel("No hay itinerarios programados para rutas extraurbanas.", SwingConstants.CENTER);
             lblVacio.setForeground(Color.WHITE);
             lblVacio.setFont(new Font("SansSerif", Font.ITALIC, 14));
             panelLista.add(lblVacio);
@@ -191,6 +191,6 @@ public class RutasExtraUrbanas extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new RutasUrbanas().setVisible(true));
+        SwingUtilities.invokeLater(() -> new RutasExtraUrbanas().setVisible(true));
     }
 }

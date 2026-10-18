@@ -1,9 +1,15 @@
 package view;
 
+import model.entities.RolUsuario;
+import model.entities.SesionUsuario;
 import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
 import view.components.RadialGradient;
 import javax.swing.*;
+
+import model.entities.Usuario;
+import model.services.AutenticacionService;
+
 import java.awt.*;
 
 public class Login extends JFrame {
@@ -66,15 +72,28 @@ public class Login extends JFrame {
     }
 
     private void ejecutarLogin() {
+
+        AutenticacionService authService = new AutenticacionService();
         String cedula = inputCedula.getText();
         String password = new String(inputPassword.getPassword());
 
-        if (cedula.isBlank() || password.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Atención",
-                    JOptionPane.WARNING_MESSAGE);
+        Usuario usuarioAutenticado = authService.login(cedula, password);
+
+        if (usuarioAutenticado != null) {
+            // Guardas en la sesión global
+            SesionUsuario.setUsuarioLogueado(usuarioAutenticado);
+            if (usuarioAutenticado.getRol() == RolUsuario.ADMINISTRADOR) {
+                new AdminHome().setVisible(true);
+                this.dispose();
+            } else {
+                new UsuarioHome().setVisible(true);
+                this.dispose();
+            }
         } else {
-            new AdminHome().setVisible(true);
-            this.dispose();
+            JOptionPane.showMessageDialog(this,
+                    "Cédula o contraseña incorrectas.",
+                    "Error de Autenticación",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }
