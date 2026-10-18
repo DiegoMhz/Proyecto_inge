@@ -4,9 +4,10 @@ import java.util.List;
 import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
 import static view.components.Button.createButton;
-import model.GestorDeFlota;
-import model.EstadoOperativo;
-import model.UnidadDeTransporte;
+
+import model.entities.EstadoOperativo;
+import model.services.GestorDeFlota;
+import model.services.UnidadDeTransporte;
 import view.components.ItemUnidadPanel;
 import view.components.RadialGradient;
 import javax.swing.*;

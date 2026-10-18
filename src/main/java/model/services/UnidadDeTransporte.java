@@ -1,4 +1,6 @@
-package model;
+package model.services;
+
+import model.entities.EstadoOperativo;
 
 public class UnidadDeTransporte {
    private String numeroAsignado;

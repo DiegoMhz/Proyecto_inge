@@ -1,4 +1,6 @@
-package model;
+package model.entities;
+
+import model.services.UnidadDeTransporte;
 
 public class ControlDeItinerario {
     private String id;

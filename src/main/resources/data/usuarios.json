@@ -33,4 +33,18 @@
   "lastName" : "k",
   "cedula" : "k",
   "correo" : "jbhj"
+}, {
+  "rol" : "CONDUCTOR",
+  "name" : "Diego",
+  "password" : "secreto12",
+  "lastName" : "Hidalgo",
+  "cedula" : "30821312",
+  "correo" : "dibzz456@gmail.com"
+}, {
+  "rol" : "ADMINISTRADOR",
+  "name" : "dsa",
+  "password" : "secreto12",
+  "lastName" : "dsada",
+  "cedula" : "321321",
+  "correo" : "sdadas@gmail.com"
 } ]

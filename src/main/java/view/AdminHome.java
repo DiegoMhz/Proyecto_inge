@@ -7,7 +7,6 @@ import view.components.RadialGradient;
 
 import javax.swing.*;
 
-
 import java.awt.*;
 
 public class AdminHome extends JFrame {
@@ -47,11 +46,12 @@ public class AdminHome extends JFrame {
                 panelRegistro.setOpaque(false);
                 panelRegistro.setBorder(BorderFactory.createEmptyBorder(60, 0, 0, 0));
                 btnRegistro = new CustomIconButton(
-                                "Registro de Admin/Conductor");
-                btnRegistro.setFont(new Font("SansSerif", Font.BOLD, 16));
-                btnRegistro.setPreferredSize(new Dimension(300, 70));
-                btnRegistro.setMinimumSize(new Dimension(300, 70));
-                btnRegistro.setMaximumSize(new Dimension(300, 70));
+                                "<html><center>Registro de<br>Admin o <br> Conductores</center></html>",
+                                "icons/cedula.png");
+                // btnRegistro.setFont(new Font("SansSerif", Font.BOLD, 16));
+                // btnRegistro.setPreferredSize(new Dimension(300, 70));
+                // btnRegistro.setMinimumSize(new Dimension(300, 70));
+                // btnRegistro.setMaximumSize(new Dimension(300, 70));
 
                 panelRegistro.add(btnRegistro);
                 background.add(panelRegistro, BorderLayout.NORTH);
@@ -71,16 +71,16 @@ public class AdminHome extends JFrame {
                 btnGestionUnidades = new CustomIconButton(
                                 "<html><center>Registro de<br>Unidades</center></html>",
                                 "icons/bus.png");
-                // btnGestionRutas = new CustomIconButton(
-                //                 "<html><center>Registro de<br>Conductores</center></html>",
-                //                 "icons/cedula.png");
+                // btnGestionRegistro = new CustomIconButton(
+                // "<html><center>Registro de<br>Conductores o <br> </center></html>",
+                // "icons/cedula.png");
                 // btnGestionReportes = new CustomIconButton(
-                //                 "<html><center>Optimización y<br>Mantenimiento</center></html>",
-                //                 "icons/laptop.png");
+                // "<html><center>Optimización y<br>Mantenimiento</center></html>",
+                // "icons/laptop.png");
                 btnGestionFlota = new CustomIconButton(
-                                "<html><center>Gestion de<br>Unidades</center></html>",
+                                "<html><center>Control de<br>Itinerarios</center></html>",
                                 "icons/circulo.png");
-
+                panelBotones.add(btnRegistro);
                 panelBotones.add(btnGestionUnidades);
                 // panelBotones.add(btnGestionRutas);
                 // panelBotones.add(btnGestionReportes);

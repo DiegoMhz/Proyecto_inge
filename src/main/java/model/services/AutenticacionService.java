@@ -1,7 +1,10 @@
-package model;
+package model.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import model.entities.RolUsuario;
+import model.entities.Usuario;
 
 import java.io.File;
 import java.io.IOException;

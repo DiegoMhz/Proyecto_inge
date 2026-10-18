@@ -1,4 +1,4 @@
-package model;
+package model.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +37,6 @@ public class Ruta {
             this.paradas.add(parada);
         }
     }
-
-
 
     public String getNombreRuta() {
         return nombreRuta;

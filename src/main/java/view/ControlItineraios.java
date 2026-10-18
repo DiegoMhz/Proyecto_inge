@@ -3,13 +3,13 @@ package view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import model.ControlDeItinerario;
-import model.EstadoOperativo;
-import model.ItinerarioService;
-import model.RolUsuario;
-import model.Ruta;
-import model.UnidadDeTransporte;
-import model.Usuario;
+import model.entities.ControlDeItinerario;
+import model.entities.EstadoOperativo;
+import model.entities.RolUsuario;
+import model.entities.Ruta;
+import model.entities.Usuario;
+import model.services.ItinerarioService;
+import model.services.UnidadDeTransporte;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -97,19 +97,15 @@ public class ControlItineraios extends JFrame {
         panelForm.add(new JLabel("Placa:"));
         panelForm.add(txtUnidadPlaca);
 
+        // RUTA
         panelForm.add(new JLabel("--- RUTA ---"));
         panelForm.add(new JLabel(""));
         panelForm.add(new JLabel("Nombre de ruta:"));
         panelForm.add(txtRutaNombre);
-        panelForm.add(new JLabel("Origen:"));
-        panelForm.add(txtRutaOrigen);
-        panelForm.add(new JLabel("Destino:"));
-        panelForm.add(txtRutaDestino);
         panelForm.add(new JLabel("Tipo de ruta:"));
         panelForm.add(cmbTipoRuta);
-        panelForm.add(new JLabel("Paradas (separadas por comas):"));
-        panelForm.add(txtParadas);
-
+        
+        //CONDUCTORES
         panelForm.add(new JLabel("--- CONDUCTOR ---"));
         panelForm.add(new JLabel(""));
         panelForm.add(new JLabel("Nombre:"));

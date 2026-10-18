@@ -1,8 +1,10 @@
 package view.components;
 
 import javax.swing.*;
+
+import model.services.GestorDeFlota;
+
 import java.awt.*;
-import model.GestorDeFlota;
 
 public class ItemUnidadPanel extends JPanel {
 

@@ -1,4 +1,4 @@
-package model;
+package model.services;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,9 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import model.entities.ControlDeItinerario;
+import model.entities.Usuario;
 
 
 

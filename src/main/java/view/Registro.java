@@ -1,10 +1,13 @@
 package view;
 import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
-import model.AutenticacionService;
+
+import model.entities.RolUsuario;
+import model.services.AutenticacionService;
+
 import javax.swing.*;
 import java.awt.*;
-import model.RolUsuario;
+
 import view.components.RadialGradient;
 
 public class Registro extends JFrame {
