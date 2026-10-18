@@ -30,10 +30,10 @@ public class AutenticacionService {
         }
     }
 
-    public Usuario BuscarPorCedula(String cedula){
-        List<Usuario> lista= obtenerUsuarios();
-        for(Usuario u: lista){
-            if(u.getCedula() != null && u.getCedula().equalsIgnoreCase(cedula)){
+    public Usuario BuscarPorCedula(String cedula) {
+        List<Usuario> lista = obtenerUsuarios();
+        for (Usuario u : lista) {
+            if (u.getCedula() != null && u.getCedula().equalsIgnoreCase(cedula)) {
                 return u;
             }
         }
@@ -41,16 +41,20 @@ public class AutenticacionService {
     }
 
     // Registrar un nuevo usuario en el JSON
-    public boolean registrarUsuario(RolUsuario rol, String name, String lastName, String cedula, String correo, String password) {
+    public boolean registrarUsuario(RolUsuario rol, String name, String lastName, String cedula, String correo,
+            String password) {
         List<Usuario> lista = obtenerUsuarios();
 
         // Validar si el usuario ya se encuentra registrado
-        if(BuscarPorCedula(cedula)!=null){
+        if (BuscarPorCedula(cedula) != null) {
             return false;
         }
 
         // Agregar el nuevo usuario y guardar la lista actualizada en el archivo
-        lista.add(new Usuario(rol,name, lastName, cedula, correo, password));
+        lista.add(new Usuario(rol, name, lastName, cedula, correo, password));
+
+        GestorMonedero gestorMonederos = new GestorMonedero();
+        gestorMonederos.crearMonedero(cedula, 0.0);
 
         File archivo = new File(RUTA_JSON);
         File carpetaPadre = archivo.getParentFile();
