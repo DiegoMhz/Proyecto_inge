@@ -1,5 +1,4 @@
 package model;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,6 +10,7 @@ import java.util.List;
 public class AutenticacionService {
     private static final String RUTA_JSON = "src/main/resources/data/usuarios.json";
     private final ObjectMapper mapper = new ObjectMapper();
+    
 
     // Cargar usuarios existentes desde el archivo JSON
     public List<Usuario> obtenerUsuarios() {
@@ -48,6 +48,10 @@ public class AutenticacionService {
 
         // Agregar el nuevo usuario y guardar la lista actualizada en el archivo
         lista.add(new Usuario(rol,name, lastName, cedula, correo, password));
+
+         // Suponiendo que tu gestor de monederos se llama gestorMonederos:
+        GestorMonedero gestorMonederos = new GestorMonedero();
+        gestorMonederos.crearMonedero(cedula, 0.0);
 
         File archivo = new File(RUTA_JSON);
         File carpetaPadre = archivo.getParentFile();

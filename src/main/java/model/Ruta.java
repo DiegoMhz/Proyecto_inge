@@ -1,82 +1,64 @@
 package model;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ruta {
-    private String nombreRuta;      // Ej: "Plaza Venezuela - UCV"
-    private String origen;          // Ej: "Plaza Venezuela"
-    private String destino;         // Ej: "Rectorado UCV"
-    private TipoRuta tipoRuta;      // URBANA o EXTRAURBANA
-    private List<String> paradas;   // Lista de nombres de las paradas
+public class Ruta{
+    private String nombreRuta;
+    private String origen;
+    private String destino;
+    private TipoRuta tipoDeRuta;
+    private List<String> municipios;
 
-    // Enum interno o externo para el tipo de ruta
-    public enum TipoRuta {
+    enum TipoRuta{
         URBANA,
         EXTRAURBANA
     }
 
-    // Constructor vacío (necesario para que Jackson/ObjectMapper pueda deserializar el JSON)
-    public Ruta() {
-        this.paradas = new ArrayList<>();
+    public Ruta(){
+        this.municipios= new ArrayList<>();
     }
 
-    // Constructor completo
-    public Ruta( String nombreRuta, String origen, String destino, TipoRuta tipoRuta) {
-        
-        this.nombreRuta = nombreRuta;
-        this.origen = origen;
-        this.destino = destino;
-        this.tipoRuta = tipoRuta;
-        this.paradas = new ArrayList<>();
-    }
-
-    // Método de conveniencia para añadir paradas fácilmente
-    public void agregarParada(String parada) {
-        if (parada != null && !parada.trim().isEmpty()) {
-            this.paradas.add(parada);
+    public Ruta(String _nombreRuta, String _origen, String _destino, TipoRuta _tipoRuta, List<String> municipios){
+        this.nombreRuta= _nombreRuta;
+        this.origen= _origen;
+        this.destino= _destino;
+        this.tipoDeRuta= _tipoRuta;
+        if(municipios!=null){
+            this.municipios= municipios;
+        }else{
+            this.municipios= new ArrayList<>();
         }
     }
 
-
-
-    public String getNombreRuta() {
+    public String getNombreRuta(){
         return nombreRuta;
     }
-
-    public void setNombreRuta(String nombreRuta) {
-        this.nombreRuta = nombreRuta;
+    void setNombreRuta(String _nombreRuta){
+        this.nombreRuta= _nombreRuta;
     }
 
-    public String getOrigen() {
+    public String getOrigen(){
         return origen;
     }
-
-    public void setOrigen(String origen) {
-        this.origen = origen;
+    void setOrigen(String _origen){
+        this.origen= _origen;
     }
 
-    public String getDestino() {
+    public String getDestino(){
         return destino;
     }
-
-    public void setDestino(String destino) {
-        this.destino = destino;
+    void setDestino(String _destino){
+        this.destino= _destino;
     }
 
-    public TipoRuta getTipoRuta() {
-        return tipoRuta;
+    public TipoRuta geTipoRuta(){
+        return tipoDeRuta;
+    }
+    void setTipoRuta(TipoRuta _tipoRuta){
+        this.tipoDeRuta= _tipoRuta;
     }
 
-    public void setTipoRuta(TipoRuta tipoRuta) {
-        this.tipoRuta = tipoRuta;
-    }
+    public List<String> getMunicipios() { return municipios; }
+    public void setMunicipios(List<String> municipios) { this.municipios = municipios; }
 
-    public List<String> getParadas() {
-        return paradas;
-    }
-
-    public void setParadas(List<String> paradas) {
-        this.paradas = paradas;
-    }
 }
