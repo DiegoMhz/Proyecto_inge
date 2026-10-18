@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ruta {
-    private String nombreRuta;      // Ej: "Plaza Venezuela - UCV"
-    private String origen;          // Ej: "Plaza Venezuela"
-    private String destino;         // Ej: "Rectorado UCV"
-    private TipoRuta tipoRuta;      // URBANA o EXTRAURBANA
-    private List<String> paradas;   // Lista de nombres de las paradas
+    private String nombreRuta; // Ej: "Plaza Venezuela - UCV"
+    private String origen; // Ej: "Plaza Venezuela"
+    private String destino; // Ej: "Rectorado UCV"
+    private TipoRuta tipoRuta; // URBANA o EXTRAURBANA
+    private List<String> paradas; // Lista de nombres de las paradas
 
     // Enum interno o externo para el tipo de ruta
     public enum TipoRuta {
@@ -16,14 +16,15 @@ public class Ruta {
         EXTRAURBANA
     }
 
-    // Constructor vacío (necesario para que Jackson/ObjectMapper pueda deserializar el JSON)
+    // Constructor vacío (necesario para que Jackson/ObjectMapper pueda deserializar
+    // el JSON)
     public Ruta() {
         this.paradas = new ArrayList<>();
     }
 
     // Constructor completo
-    public Ruta( String nombreRuta, String origen, String destino, TipoRuta tipoRuta) {
-        
+    public Ruta(String nombreRuta, String origen, String destino, TipoRuta tipoRuta) {
+
         this.nombreRuta = nombreRuta;
         this.origen = origen;
         this.destino = destino;
@@ -76,5 +77,10 @@ public class Ruta {
 
     public void setParadas(List<String> paradas) {
         this.paradas = paradas;
+    }
+
+    @Override
+    public String toString() {
+        return nombreRuta + " (" + origen + " -> " + destino + ")";
     }
 }

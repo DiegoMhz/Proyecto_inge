@@ -19,7 +19,10 @@ public class Usuario {
         this.correo= correo;
         this.rol= rol;
     }
-
+    @Override
+public String toString() {
+    return name + " " + lastName + " - C.I: " + cedula;
+}
     // Getters y Setters
     public String getCedula() { return cedula; }
     public void setCedula(String cedula){this.cedula=cedula;}

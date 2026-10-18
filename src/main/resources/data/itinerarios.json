@@ -1,7 +1,7 @@
 [ {
   "id" : "01",
   "ruta" : {
-    "nombreRuta" : "DDD",
+    "nombreRuta" : "SS",
     "origen" : "",
     "destino" : "",
     "tipoRuta" : "URBANA",
@@ -12,17 +12,44 @@
     "placa" : "UCV",
     "modelo" : "Encava Especial",
     "capacidad_de_pasajeros" : 35,
-    "capacidad" : 35,
-    "estadoOperativo" : "activo"
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
   },
   "conductor" : {
     "rol" : "CONDUCTOR",
     "name" : "Diego",
-    "password" : "dasdsadasdas",
+    "password" : "secreto12",
     "lastName" : "Hidalgo",
-    "cedula" : "30926327",
-    "correo" : "dasdasdasdsa"
+    "cedula" : "30821312",
+    "correo" : "dibzz456@gmail.com"
   },
-  "fechaLlegada" : "13:00",
-  "fechaSalida" : "12:00"
+  "fechaSalida" : "08:00",
+  "fechaLlegada" : "09:30"
+}, {
+  "id" : "02",
+  "ruta" : {
+    "nombreRuta" : "Plaza Venezuela - UCV",
+    "origen" : "Plaza Venezuela",
+    "destino" : "Rectorado UCV",
+    "tipoRuta" : "URBANA",
+    "paradas" : [ "Puerta Tamanaquito", "Las Tres Gracias" ]
+  },
+  "unidad" : {
+    "numeroAsignado" : "U-2",
+    "placa" : "UCV-101-MOD",
+    "modelo" : "Encava Especial",
+    "capacidad_de_pasajeros" : 35,
+    "estadoOperativo" : "activo",
+    "capacidad" : 35
+  },
+  "conductor" : {
+    "rol" : "CONDUCTOR",
+    "name" : "awd",
+    "password" : "awd",
+    "lastName" : "awd",
+    "cedula" : "awd",
+    "correo" : "ad"
+  },
+  "fechaSalida" : "08:00",
+  "fechaLlegada" : "09:30"
 } ]
