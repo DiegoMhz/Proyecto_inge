@@ -7,8 +7,9 @@ public class Ruta {
     private String nombreRuta; // Ej: "Plaza Venezuela - UCV"
     private String origen; // Ej: "Plaza Venezuela"
     private String destino; // Ej: "Rectorado UCV"
-    private TipoRuta tipoRuta; // URBANA o EXTRAURBANA
+    private TipoRuta tipoDeRuta; // URBANA o EXTRAURBANA
     private List<String> paradas; // Lista de nombres de las paradas
+    private List<String> municipios;
 
     // Enum interno o externo para el tipo de ruta
     public enum TipoRuta {
@@ -20,16 +21,20 @@ public class Ruta {
     // el JSON)
     public Ruta() {
         this.paradas = new ArrayList<>();
+        this.municipios = new ArrayList<>();
     }
 
     // Constructor completo
-    public Ruta(String nombreRuta, String origen, String destino, TipoRuta tipoRuta) {
-
-        this.nombreRuta = nombreRuta;
-        this.origen = origen;
-        this.destino = destino;
-        this.tipoRuta = tipoRuta;
-        this.paradas = new ArrayList<>();
+    public Ruta(String _nombreRuta, String _origen, String _destino, TipoRuta _tipoRuta, List<String> municipios) {
+        this.nombreRuta = _nombreRuta;
+        this.origen = _origen;
+        this.destino = _destino;
+        this.tipoDeRuta = _tipoRuta;
+        if (municipios != null) {
+            this.municipios = municipios;
+        } else {
+            this.municipios = new ArrayList<>();
+        }
     }
 
     // Método de conveniencia para añadir paradas fácilmente
@@ -37,6 +42,14 @@ public class Ruta {
         if (parada != null && !parada.trim().isEmpty()) {
             this.paradas.add(parada);
         }
+    }
+
+    public List<String> getMunicipios() {
+        return municipios;
+    }
+
+    public void setMunicipios(List<String> municipios) {
+        this.municipios = municipios;
     }
 
     public String getNombreRuta() {
@@ -64,11 +77,11 @@ public class Ruta {
     }
 
     public TipoRuta getTipoRuta() {
-        return tipoRuta;
+        return tipoDeRuta;
     }
 
     public void setTipoRuta(TipoRuta tipoRuta) {
-        this.tipoRuta = tipoRuta;
+        this.tipoDeRuta = tipoRuta;
     }
 
     public List<String> getParadas() {
