@@ -1,21 +1,8 @@
-[
-  {
-    "nombreRuta": "Plaza Venezuela - UCV",
-    "origen": "Plaza Venezuela",
-    "destino": "Rectorado UCV",
-    "tipoRuta": "URBANA",
-    "paradas": [
-      "Puerta Tamanaquito",
-      "Las Tres Gracias"
-    ]
-  },
-  {
-    "nombreRuta": "Caracas - Valencia",
-    "origen": "Terminal La Bandera",
-    "destino": "Terminal Big Low",
-    "tipoRuta": "EXTRAURBANA",
-    "paradas": [
-      "Maracay"
-    ]
-  }
-]
+[ {
+  "nombreRuta" : "DD",
+  "origen" : "DD",
+  "destino" : "DD",
+  "paradas" : null,
+  "municipios" : [ "Av cass" ],
+  "tipoRuta" : "URBANA"
+} ]
