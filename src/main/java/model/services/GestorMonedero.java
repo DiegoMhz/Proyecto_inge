@@ -9,10 +9,15 @@ import java.util.List;
 
 public class GestorMonedero{
     private List<Monedero> monederos;
-    private final File archivoMonederos = new File("src/main/resources/data/monederos.json");
+    private final File archivoMonederos;
     private final ObjectMapper mapper = new ObjectMapper();
 
     public GestorMonedero() {
+        this(new File("src/main/resources/data/monederos.json"));
+    }
+
+    public GestorMonedero(File archivoMonederos) {
+        this.archivoMonederos = archivoMonederos;
         this.monederos = new ArrayList<>();
         cargarDesdeMonederos();
     }
@@ -46,8 +51,11 @@ public class GestorMonedero{
 
     // Buscar el monedero de un usuario por su cédula
     public Monedero buscarPorCedula(String cedulaUsuario) {
+        if (cedulaUsuario == null) {
+            return null;
+        }
         for (Monedero m : monederos) {
-            if (m.getCedulaUsuario().equalsIgnoreCase(cedulaUsuario)) {
+            if (m.getCedulaUsuario() != null && m.getCedulaUsuario().equalsIgnoreCase(cedulaUsuario)) {
                 return m;
             }
         }
@@ -85,10 +93,15 @@ public class GestorMonedero{
     public boolean descontarMonedero(String cedulaUsuario, double monto) {
         Monedero m = buscarPorCedula(cedulaUsuario);
         if (m != null) {
+            double saldoAnterior = m.getSaldo();
             boolean exito = m.descontar(monto);
             if (exito) {
-                guardarEnMonederos();
-                return true;
+                if (guardarEnMonederos()) {
+                    return true;
+                }
+                m.setSaldo(saldoAnterior);
+                System.err.println("No se pudo persistir el débito del monedero.");
+                return false;
             } else {
                 System.out.println("ERROR: Saldo insuficiente o monto inválido.");
             }

@@ -14,13 +14,18 @@ import java.util.UUID;
 
 public class GestorDeTicket {
     private List<Ticket> tickets;
-    private final File archivoTickets = new File("src/main/resources/data/tickets.json");
+    private final File archivoTickets;
     private final ObjectMapper mapper = new ObjectMapper();
-    private GestorMonedero gestorMonederos;
+    private final GestorMonedero gestorMonederos;
 
     public GestorDeTicket(GestorMonedero gestorMonederos) {
+        this(gestorMonederos, new File("src/main/resources/data/tickets.json"));
+    }
+
+    public GestorDeTicket(GestorMonedero gestorMonederos, File archivoTickets) {
         this.tickets = new ArrayList<>();
         this.gestorMonederos = gestorMonederos;
+        this.archivoTickets = archivoTickets;
         cargarDesdeTickets();
     }
 
@@ -36,13 +41,16 @@ public class GestorDeTicket {
         }
     }
 
-    private boolean guardarEnTickets() {
+    private boolean guardarEnTickets(List<Ticket> ticketsAGuardar) {
         File carpetaPadre = archivoTickets.getParentFile();
         if (carpetaPadre != null && !carpetaPadre.exists()) {
-            carpetaPadre.mkdirs();
+            if (!carpetaPadre.mkdirs() && !carpetaPadre.exists()) {
+                System.err.println("No se pudo crear el directorio para los tickets.");
+                return false;
+            }
         }
         try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(archivoTickets, tickets);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(archivoTickets, ticketsAGuardar);
             return true;
         } catch (IOException e) {
             System.err.println("Error al guardar tickets: " + e.getMessage());
@@ -52,15 +60,12 @@ public class GestorDeTicket {
 
     // Simulación de la compra de ticket con cobro en monedero
     public boolean procesarCompraTicket(String cedulaUsuario, Ruta ruta, String rolUsuario, double tarifaACobrar) {
-        // 1. Intentar hacer el débito en el monedero del usuario
-        boolean debitoExitoso = gestorMonederos.descontarMonedero(cedulaUsuario, tarifaACobrar);
-
-        if (!debitoExitoso) {
-            System.out.println("ERROR: No se pudo procesar la compra. Saldo insuficiente o usuario no registrado.");
+        if (ruta == null || cedulaUsuario == null || !Double.isFinite(tarifaACobrar)
+                || tarifaACobrar <= 0 || gestorMonederos.buscarPorCedula(cedulaUsuario) == null) {
+            System.err.println("No se puede comprar el ticket con los datos indicados.");
             return false;
         }
 
-        // 2. Si el débito fue exitoso, generar y guardar el ticket
         String idTicket = "TICK-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         Ticket nuevoTicket = new Ticket(
                 idTicket,
@@ -70,9 +75,21 @@ public class GestorDeTicket {
                 rolUsuario,
                 tarifaACobrar);
 
-        tickets.add(nuevoTicket);
-        guardarEnTickets();
+        List<Ticket> ticketsAnteriores = new ArrayList<>(tickets);
+        List<Ticket> ticketsActualizados = new ArrayList<>(ticketsAnteriores);
+        ticketsActualizados.add(nuevoTicket);
+        if (!guardarEnTickets(ticketsActualizados)) {
+            return false;
+        }
 
+        if (!gestorMonederos.descontarMonedero(cedulaUsuario, tarifaACobrar)) {
+            if (!guardarEnTickets(ticketsAnteriores)) {
+                System.err.println("No se pudo revertir el ticket luego de fallar el débito.");
+            }
+            return false;
+        }
+
+        tickets = ticketsActualizados;
         System.out.println("ÉXITO: Ticket generado con ID " + idTicket + " por un monto de " + tarifaACobrar + " BS.");
         return true;
     }

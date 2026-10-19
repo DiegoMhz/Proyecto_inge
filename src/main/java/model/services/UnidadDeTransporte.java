@@ -7,6 +7,7 @@ public class UnidadDeTransporte {
    private String placa;
    private String modelo;
    private int capacidad_de_pasajeros;
+   private Integer asientosDisponibles;
    private EstadoOperativo estado;
 
    public UnidadDeTransporte() {
@@ -17,6 +18,7 @@ public class UnidadDeTransporte {
       this.placa = _placa;
       this.modelo = _modelo;
       this.capacidad_de_pasajeros = _capacidad_de_pasajeros;
+      this.asientosDisponibles = _capacidad_de_pasajeros;
       this.estado = EstadoOperativo.activo;
    }
 
@@ -50,6 +52,9 @@ public class UnidadDeTransporte {
 
    public void setCapacidad_de_pasajeros(int _capacidad) {
       this.capacidad_de_pasajeros = _capacidad;
+      if (asientosDisponibles != null) {
+         asientosDisponibles = Math.min(asientosDisponibles, _capacidad);
+      }
    }
 
    public EstadoOperativo getEstadoOperativo() {
@@ -65,7 +70,7 @@ public class UnidadDeTransporte {
    }
 
    public void setCapacidad(int capacidad) {
-      this.capacidad_de_pasajeros = capacidad;
+      setCapacidad_de_pasajeros(capacidad);
    }
 
    public void setEstado(EstadoOperativo _estado) {
@@ -73,7 +78,15 @@ public class UnidadDeTransporte {
    }
 
    public void setCapacidadDePasajeros(int _capacidad) {
-      this.capacidad_de_pasajeros = _capacidad;
+      setCapacidad_de_pasajeros(_capacidad);
+   }
+
+   public int getAsientosDisponibles() {
+      return asientosDisponibles == null ? capacidad_de_pasajeros : asientosDisponibles;
+   }
+
+   public void setAsientosDisponibles(int asientosDisponibles) {
+      this.asientosDisponibles = asientosDisponibles;
    }
 
    public UnidadDeTransporte getUnidadDeTransporte(String placa) {

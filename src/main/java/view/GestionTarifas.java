@@ -3,16 +3,19 @@ package view;
 import static view.components.Title.createTitlePanel;
 import static view.components.InputFactory.createInputPanel;
 
+import model.entities.Municipio;
+import model.services.TarifaService;
 import view.components.RadialGradient;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class GestionTarifas extends JFrame {
 
-    // Configuración Global de Descuentos
+    private final TarifaService tarifaService;
     private JTextField txtDescuentoEstudiante;
-    private JTextField txtDescuentoProfesor;
+    private JTextField txtDescuentoEmpleado;
 
     // Configuración por Municipio
     private JTextField txtMunicipio;
@@ -21,8 +24,9 @@ public class GestionTarifas extends JFrame {
     private JPanel panelListaTarifas;
 
     public GestionTarifas() {
+        tarifaService = new TarifaService();
         initUI();
-        cargarTarifasEjemplo();
+        cargarDatosGuardados();
     }
 
     private void initUI() {
@@ -78,11 +82,11 @@ public class GestionTarifas extends JFrame {
                 " Descuentos Generales del Sistema (%) ",
                 0, 0, new Font("SansSerif", Font.BOLD, 12), Color.WHITE));
 
-        txtDescuentoEstudiante = new JTextField("50.0"); // Valor por defecto
-        txtDescuentoProfesor = new JTextField("25.0");   // Valor por defecto
+        txtDescuentoEstudiante = new JTextField("15");
+        txtDescuentoEmpleado = new JTextField("35");
 
-        panelDescuentos.add(createInputPanel("Descuento Estudiantes (%)", txtDescuentoEstudiante));
-        panelDescuentos.add(createInputPanel("Descuento Profesores (%)", txtDescuentoProfesor));
+        panelDescuentos.add(createInputPanel("Porcentaje Aplicado a Estudiantes (%)", txtDescuentoEstudiante));
+        panelDescuentos.add(createInputPanel("Porcentaje Aplicado a Empleados (%)", txtDescuentoEmpleado));
 
         panelTarjeta.add(panelDescuentos);
 
@@ -160,25 +164,31 @@ public class GestionTarifas extends JFrame {
 
     private void guardarDescuentosGenerales() {
         String estStr = txtDescuentoEstudiante.getText().trim();
-        String profStr = txtDescuentoProfesor.getText().trim();
+        String empleadoStr = txtDescuentoEmpleado.getText().trim();
 
         try {
-            double descEst = Double.parseDouble(estStr.replace(",", "."));
-            double descProf = Double.parseDouble(profStr.replace(",", "."));
+            int descEst = Integer.parseInt(estStr);
+            int descEmpleado = Integer.parseInt(empleadoStr);
 
-            if (descEst < 0 || descEst > 100 || descProf < 0 || descProf > 100) {
+            if (descEst < 10 || descEst > 20 || descEmpleado < 30 || descEmpleado > 60) {
                 JOptionPane.showMessageDialog(this,
-                        "Los porcentajes de descuento deben estar entre 0% y 100%.",
+                        "El porcentaje debe estar entre el 10 y 20% para estudiantes, "
+                                + "y entre el 30 y 60% para empleados y profesores.",
                         "Rango Inválido", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Aquí guardas los porcentajes globales en tu servicio o configuración JSON
-            
+            if (!tarifaService.guardarDescuentos(descEst, descEmpleado)) {
+                JOptionPane.showMessageDialog(this,
+                        "No se pudieron guardar los descuentos. Revise el archivo y los permisos.",
+                        "Error al guardar", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             JOptionPane.showMessageDialog(this,
                     "¡Descuentos globales actualizados!\n\n" +
                             "🎓 Estudiantes: " + descEst + "%\n" +
-                            "👨‍🏫 Profesores: " + descProf + "%",
+                            "👥 Empleados: " + descEmpleado + "%",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (NumberFormatException e) {
@@ -200,23 +210,28 @@ public class GestionTarifas extends JFrame {
         }
 
         try {
-            double tarifa = Double.parseDouble(tarifaStr.replace(",", "."));
-            if (tarifa < 0) {
+            float tarifa = Float.parseFloat(tarifaStr.replace(",", "."));
+            if (!Float.isFinite(tarifa) || tarifa < 0) {
                 JOptionPane.showMessageDialog(this,
-                        "La tarifa base no puede ser negativa.",
+                        "Ingrese una tarifa válida, finita y no negativa.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Aquí guardas/actualizas la tarifa del municipio en tu JSON
-            
+            if (!tarifaService.guardarMunicipio(new Municipio(municipio, tarifa))) {
+                JOptionPane.showMessageDialog(this,
+                        "No se pudo guardar la tarifa. Revise el archivo y los permisos.",
+                        "Error al guardar", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             JOptionPane.showMessageDialog(this,
                     "Tarifa guardada exitosamente para " + municipio + ": " + tarifa + " BS",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             txtMunicipio.setText("");
             txtTarifaBase.setText("");
-            cargarTarifasEjemplo();
+            cargarTarifasGuardadas();
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
@@ -225,21 +240,35 @@ public class GestionTarifas extends JFrame {
         }
     }
 
-    private void cargarTarifasEjemplo() {
+    private void cargarDatosGuardados() {
+        txtDescuentoEstudiante.setText(String.valueOf(tarifaService.getDescuentoEstudiante()));
+        txtDescuentoEmpleado.setText(String.valueOf(tarifaService.getDescuentoEmpleado()));
+        cargarTarifasGuardadas();
+    }
+
+    private void cargarTarifasGuardadas() {
         panelListaTarifas.removeAll();
 
-        // Datos de muestra (reemplazar por llamadas a tu servicio JSON de Tarifas)
-        panelListaTarifas.add(crearFilaTarifaVisual("Libertador", 50.0));
-        panelListaTarifas.add(Box.createVerticalStrut(6));
-        panelListaTarifas.add(crearFilaTarifaVisual("Baruta", 60.0));
-        panelListaTarifas.add(Box.createVerticalStrut(6));
-        panelListaTarifas.add(crearFilaTarifaVisual("Chacao", 55.0));
+        List<Municipio> municipios = tarifaService.obtenerMunicipios();
+        if (municipios.isEmpty()) {
+            JLabel lblVacio = new JLabel("No hay tarifas de municipios registradas.");
+            lblVacio.setAlignmentX(Component.LEFT_ALIGNMENT);
+            panelListaTarifas.add(lblVacio);
+        } else {
+            for (Municipio municipio : municipios) {
+                if (municipio != null && municipio.getMunicipioNombre() != null) {
+                    panelListaTarifas.add(crearFilaTarifaVisual(
+                            municipio.getMunicipioNombre(), municipio.getMunicipioTarifa()));
+                    panelListaTarifas.add(Box.createVerticalStrut(6));
+                }
+            }
+        }
 
         panelListaTarifas.revalidate();
         panelListaTarifas.repaint();
     }
 
-    private JPanel crearFilaTarifaVisual(String municipio, double tarifaBase) {
+    private JPanel crearFilaTarifaVisual(String municipio, float tarifaBase) {
         JPanel fila = new JPanel(new BorderLayout(8, 0));
         fila.setBackground(new Color(242, 244, 245));
         fila.setBorder(BorderFactory.createCompoundBorder(

@@ -5,25 +5,29 @@ import javax.swing.table.DefaultTableModel;
 
 import model.entities.ControlDeItinerario;
 import model.entities.EstadoOperativo;
-import model.services.RutaService;
-import model.entities.Ruta;
-import model.entities.Usuario;
-import model.services.ConductorService;
 import model.services.ItinerarioService;
+import model.entities.Municipio;
+import model.entities.RolUsuario;
+import model.entities.Ruta;
+import model.services.TarifaService;
 import model.services.UnidadDeTransporte;
+import model.entities.Usuario;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class ControlItineraios extends JFrame {
 
     private final ItinerarioService servicio;
-    private final RutaService rutaService; // <-- Declarar RutaService
-    private JComboBox<Ruta> cmbRutas;
+    private final TarifaService tarifaService;
+
     // Componentes del Formulario
     private JTextField txtId;
+    private JTextField txtRutaNombre, txtRutaOrigen, txtRutaDestino, txtParadas;
     private JComboBox<Ruta.TipoRuta> cmbTipoRuta;
+    private JComboBox<Municipio> cmbMunicipio;
     private JTextField txtUnidadNumero, txtUnidadPlaca, txtUnidadModelo, txtUnidadCapacidad;
     private JComboBox<EstadoOperativo> cmbEstadoUnidad;
     private JTextField txtConductorNombre, txtConductorApellido, txtConductorCedula, txtConductorCorreo;
@@ -33,13 +37,11 @@ public class ControlItineraios extends JFrame {
     // Componentes de la Tabla
     private JTable tablaItinerarios;
     private DefaultTableModel modeloTabla;
-    private ConductorService conductorService;
-    private JComboBox<Usuario> cmbConductores;
 
     public ControlItineraios() {
-        this.servicio = new ItinerarioService();
-        this.conductorService = new ConductorService();
-        this.rutaService = new RutaService();
+        this.tarifaService = new TarifaService();
+        this.servicio = new ItinerarioService(tarifaService);
+
         setTitle("Gestión de Control de Itinerarios - SGT");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,16 +63,10 @@ public class ControlItineraios extends JFrame {
         cargarDatosTabla();
     }
 
-    private void actualizarComboRutas() {
-        Ruta.TipoRuta tipoSeleccionado = (Ruta.TipoRuta) cmbTipoRuta.getSelectedItem();
-        if (tipoSeleccionado != null) {
-            cmbRutas.setModel(rutaService.obtenerModeloRutasPorTipo(tipoSeleccionado));
-        }
-    }
-
-    // Pestaña 1: Formulario de entrada de datos
+    /**
+     * Pestaña 1: Formulario de entrada de datos
+     */
     private JPanel crearPanelFormulario() {
-        cmbConductores = new JComboBox<>();
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
@@ -79,14 +75,23 @@ public class ControlItineraios extends JFrame {
         // Campos del formulario
         txtId = new JTextField(servicio.obtenerSiguienteId());
         txtId.setEditable(false);
-        
+        txtRutaNombre = new JTextField();
+        txtRutaOrigen = new JTextField();
+        txtRutaDestino = new JTextField();
+        txtParadas = new JTextField();
         cmbTipoRuta = new JComboBox<>(Ruta.TipoRuta.values());
+        List<Municipio> municipios = tarifaService.obtenerMunicipios();
+        cmbMunicipio = new JComboBox<>(municipios.toArray(new Municipio[0]));
         txtUnidadNumero = new JTextField();
         txtUnidadPlaca = new JTextField();
         txtUnidadModelo = new JTextField();
         txtUnidadCapacidad = new JTextField();
         cmbEstadoUnidad = new JComboBox<>(EstadoOperativo.values());
-
+        txtConductorNombre = new JTextField();
+        txtConductorApellido = new JTextField();
+        txtConductorCedula = new JTextField();
+        txtConductorCorreo = new JTextField();
+        txtConductorPassword = new JPasswordField();
         txtHoraSalida = new JTextField("08:00");
         txtHoraLlegada = new JTextField("09:30");
 
@@ -99,27 +104,33 @@ public class ControlItineraios extends JFrame {
         panelForm.add(new JLabel("Placa:"));
         panelForm.add(txtUnidadPlaca);
 
-        // RUTA
         panelForm.add(new JLabel("--- RUTA ---"));
         panelForm.add(new JLabel(""));
-        // Selector de Tipo de Ruta
-        cmbTipoRuta = new JComboBox<>(Ruta.TipoRuta.values());
-        panelForm.add(new JLabel("Tipo de Ruta:"));
+        panelForm.add(new JLabel("Nombre de ruta:"));
+        panelForm.add(txtRutaNombre);
+        panelForm.add(new JLabel("Origen:"));
+        panelForm.add(txtRutaOrigen);
+        panelForm.add(new JLabel("Destino:"));
+        panelForm.add(txtRutaDestino);
+        panelForm.add(new JLabel("Municipio:"));
+        panelForm.add(cmbMunicipio);
+        panelForm.add(new JLabel("Tipo de ruta:"));
         panelForm.add(cmbTipoRuta);
+        panelForm.add(new JLabel("Paradas (separadas por comas):"));
+        panelForm.add(txtParadas);
 
-        cmbRutas = new JComboBox<>(rutaService.obtenerModeloRutas());
-        panelForm.add(new JLabel("Seleccionar Ruta:"));
-        panelForm.add(cmbRutas);
-
-        cmbTipoRuta.addActionListener(e -> actualizarComboRutas());
-
-        actualizarComboRutas();
-        // CONDUCTORES
-        cmbConductores.setModel(conductorService.obtenerModeloConductores());
         panelForm.add(new JLabel("--- CONDUCTOR ---"));
         panelForm.add(new JLabel(""));
-        panelForm.add(new JLabel("Seleccionar Conductor:"));
-        panelForm.add(cmbConductores);
+        panelForm.add(new JLabel("Nombre:"));
+        panelForm.add(txtConductorNombre);
+        panelForm.add(new JLabel("Apellido:"));
+        panelForm.add(txtConductorApellido);
+        panelForm.add(new JLabel("Cédula:"));
+        panelForm.add(txtConductorCedula);
+        panelForm.add(new JLabel("Correo:"));
+        panelForm.add(txtConductorCorreo);
+        panelForm.add(new JLabel("Contraseña:"));
+        panelForm.add(txtConductorPassword);
 
         panelForm.add(new JLabel("--- HORARIOS ---"));
         panelForm.add(new JLabel(""));
@@ -151,7 +162,7 @@ public class ControlItineraios extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        String[] columnas = { "ID", "Ruta", "Origen", "Destino", "Unidad", "Conductor", "Salida", "Llegada" };
+        String[] columnas = {"ID", "Ruta", "Origen-Destino", "Municipio", "Unidad", "Conductor", "Salida", "Llegada"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -166,53 +177,97 @@ public class ControlItineraios extends JFrame {
         JButton btnRefrescar = new JButton("Actualizar Tabla");
         btnRefrescar.addActionListener(e -> cargarDatosTabla());
 
+        JButton btnEliminar = new JButton("Eliminar Itinerario");
+        btnEliminar.addActionListener(e -> eliminarItinerarioSeleccionado());
+
+        JPanel panelAccionesTabla = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        panelAccionesTabla.add(btnRefrescar);
+        panelAccionesTabla.add(btnEliminar);
+
         panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(btnRefrescar, BorderLayout.SOUTH);
+        panel.add(panelAccionesTabla, BorderLayout.SOUTH);
 
         return panel;
+    }
+
+    private void eliminarItinerarioSeleccionado() {
+        int filaSeleccionada = tablaItinerarios.getSelectedRow();
+        if (filaSeleccionada < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione el itinerario que desea eliminar.",
+                    "Ningún itinerario seleccionado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String idItinerario = String.valueOf(
+                modeloTabla.getValueAt(filaSeleccionada, 0));
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de que desea eliminar el itinerario " + idItinerario + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        if (servicio.eliminarItinerario(idItinerario)) {
+            cargarDatosTabla();
+            txtId.setText(servicio.obtenerSiguienteId());
+            JOptionPane.showMessageDialog(this,
+                    "Itinerario " + idItinerario + " eliminado.",
+                    "Eliminación exitosa", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo eliminar el itinerario. Actualice la tabla e inténtelo de nuevo.",
+                    "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
      * Lógica para validar, instanciar y guardar mediante ItinerarioService
      */
     private void procesarGuardado() {
+        if (!validarCamposObligatorios()) {
+            return;
+        }
+
         try {
             String salida = txtHoraSalida.getText().trim();
             String llegada = txtHoraLlegada.getText().trim();
-            if (salida.isEmpty() || llegada.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "La salida y llegada estimada son obligatorias.", "Advertencia",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            Municipio municipio = municipioSeleccionado();
 
-            Usuario conductorSeleccionado = (Usuario) cmbConductores.getSelectedItem();
-
-            if (conductorSeleccionado == null) {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar un conductor de la lista.", "Advertencia",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            Ruta rutaSeleccionada = (Ruta) cmbRutas.getSelectedItem();
-
-            if (rutaSeleccionada == null) {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar una ruta de la lista.", "Advertencia",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            Ruta ruta = new Ruta(
+                txtRutaNombre.getText().trim(),
+                txtRutaOrigen.getText().trim(),
+                txtRutaDestino.getText().trim(),
+                (Ruta.TipoRuta) cmbTipoRuta.getSelectedItem(), List.of()
+            );
+            List<String> paradas = Arrays.stream(txtParadas.getText().split(","))
+                .map(String::trim)
+                .filter(parada -> !parada.isEmpty())
+                .toList();
+            ruta.setParadas(paradas);
 
             UnidadDeTransporte unidad = new UnidadDeTransporte();
             String placa = txtUnidadPlaca.getText().trim();
             unidad = unidad.getUnidadDeTransporte(placa);
             unidad.setEstado((EstadoOperativo) cmbEstadoUnidad.getSelectedItem());
 
+            Usuario conductor = new Usuario(
+                RolUsuario.CONDUCTOR,
+                txtConductorNombre.getText().trim(),
+                txtConductorApellido.getText().trim(),
+                txtConductorCedula.getText().trim(),
+                txtConductorCorreo.getText().trim(),
+                new String(txtConductorPassword.getPassword())
+            );
+
             ControlDeItinerario nuevoItinerario = new ControlDeItinerario(
-                    null, rutaSeleccionada, unidad, conductorSeleccionado, salida, llegada);
+                null, ruta, unidad, conductor, salida, llegada,
+                municipio.getMunicipioNombre()
+            );
 
             Optional<String> conflicto = servicio.validarConflictoHorario(nuevoItinerario);
             if (conflicto.isPresent()) {
-                JOptionPane.showMessageDialog(this, conflicto.get(), "Horario inválido o en conflicto",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, conflicto.get(), "Horario inválido o en conflicto", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -221,18 +276,79 @@ public class ControlItineraios extends JFrame {
 
             if (exito) {
                 JOptionPane.showMessageDialog(this, "¡Itinerario " + nuevoItinerario.getId()
-                        + " guardado exitosamente en JSON!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    + " guardado exitosamente en JSON!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 limpiarFormulario();
                 cargarDatosTabla();
             } else {
-                JOptionPane.showMessageDialog(this, "No se pudo guardar el itinerario.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No se pudo guardar el itinerario.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al procesar los datos: " + ex.getMessage(), "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al procesar los datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private boolean validarCamposObligatorios() {
+        JTextField[] campos = {
+            txtUnidadPlaca,
+            txtRutaNombre,
+            txtRutaOrigen,
+            txtRutaDestino,
+            txtParadas,
+            txtConductorNombre,
+            txtConductorApellido,
+            txtConductorCedula,
+            txtConductorCorreo,
+            txtConductorPassword,
+            txtHoraSalida,
+            txtHoraLlegada
+        };
+        String[] nombres = {
+            "Placa",
+            "Nombre de ruta",
+            "Origen",
+            "Destino",
+            "Paradas",
+            "Nombre del conductor",
+            "Apellido del conductor",
+            "Cédula del conductor",
+            "Correo del conductor",
+            "Contraseña del conductor",
+            "Hora de salida",
+            "Llegada estimada"
+        };
+
+        StringBuilder faltantes = new StringBuilder();
+        Component primerCampoVacio = null;
+        for (int i = 0; i < campos.length; i++) {
+            if (campos[i].getText().isBlank()) {
+                if (primerCampoVacio == null) {
+                    primerCampoVacio = campos[i];
+                }
+                faltantes.append("\n• ").append(nombres[i]);
+            }
+        }
+
+        if (municipioSeleccionado() == null) {
+            faltantes.append("\n• Municipio (registre municipios en Gestión de Tarifas si la lista está vacía)");
+            if (primerCampoVacio == null) {
+                primerCampoVacio = cmbMunicipio;
+            }
+        }
+
+        if (primerCampoVacio != null) {
+            JOptionPane.showMessageDialog(this,
+                    "Complete los siguientes campos obligatorios:" + faltantes,
+                    "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+            primerCampoVacio.requestFocusInWindow();
+            return false;
+        }
+
+        return true;
+    }
+
+    private Municipio municipioSeleccionado() {
+        return (Municipio) cmbMunicipio.getSelectedItem();
     }
 
     /**
@@ -244,24 +360,25 @@ public class ControlItineraios extends JFrame {
 
         for (ControlDeItinerario it : lista) {
             String idRuta = (it.getRuta() != null) ? it.getRuta().getNombreRuta() : "N/A";
-            String origen = (it.getRuta() != null && it.getRuta().getOrigen() != null) 
-                    ? it.getRuta().getOrigen() : "N/A";
-            String destino = (it.getRuta() != null && it.getRuta().getDestino() != null) 
-                    ? it.getRuta().getDestino() : "N/A";
+            String origenDestino = (it.getRuta() != null) ? it.getRuta().getOrigen() + " -> " + it.getRuta().getDestino() : "N/A";
             String unidad = (it.getUnidad() != null) ? it.getUnidad().getPlaca() : "N/A";
             String conductor = (it.getConductor() != null) ? it.getConductor().getName() : "N/A";
+            String municipio = it.getRuta() != null && it.getRuta().getMunicipios() != null
+                    && !it.getRuta().getMunicipios().isEmpty()
+                            ? String.join(", ", it.getRuta().getMunicipios())
+                            : "N/A";
             String salidaStr = (it.getFechaSalida() != null) ? it.getFechaSalida() : "N/A";
             String llegadaStr = (it.getFechaLlegada() != null) ? it.getFechaLlegada() : "N/A";
 
             Object[] fila = {
-                    it.getId(),
-                    idRuta,
-                    origen,
-                    destino,
-                    unidad,
-                    conductor,
-                    salidaStr,
-                    llegadaStr
+                it.getId(),
+                idRuta,
+                origenDestino,
+                municipio,
+                unidad,
+                conductor,
+                salidaStr,
+                llegadaStr
             };
             modeloTabla.addRow(fila);
         }
@@ -269,7 +386,10 @@ public class ControlItineraios extends JFrame {
 
     private void limpiarFormulario() {
         txtId.setText(servicio.obtenerSiguienteId());
-       
+        txtRutaNombre.setText("");
+        txtRutaOrigen.setText("");
+        txtRutaDestino.setText("");
+        txtParadas.setText("");
         txtUnidadNumero.setText("");
         txtUnidadPlaca.setText("");
         txtUnidadModelo.setText("");

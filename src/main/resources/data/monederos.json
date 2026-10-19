@@ -4,4 +4,10 @@
 }, {
   "cedulaUsuario" : "V-00000000",
   "saldo" : 23.0
+}, {
+  "cedulaUsuario" : "1",
+  "saldo" : 0.0
+}, {
+  "cedulaUsuario" : "2",
+  "saldo" : 39744.0
 } ]

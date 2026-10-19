@@ -21,14 +21,24 @@ public class ItinerarioService {
     private static final Pattern PATRON_HORA = Pattern.compile("(?:[01]\\d|2[0-3]):[0-5]\\d");
     private final File archivo;
     private final ObjectMapper mapper;
+    private final TarifaService tarifaService;
 
     public ItinerarioService() {
-        this(new File(RUTA_ARCHIVO));
+        this(new File(RUTA_ARCHIVO), new TarifaService());
+    }
+
+    public ItinerarioService(TarifaService tarifaService) {
+        this(new File(RUTA_ARCHIVO), tarifaService);
     }
 
     public ItinerarioService(File archivo) {
+        this(archivo, new TarifaService());
+    }
+
+    public ItinerarioService(File archivo, TarifaService tarifaService) {
         this.archivo = archivo;
         this.mapper = new ObjectMapper();
+        this.tarifaService = tarifaService;
     }
 
     public String obtenerSiguienteId() {
@@ -67,6 +77,56 @@ public class ItinerarioService {
         }
     }
 
+    public Optional<ControlDeItinerario> buscarPorId(String id) {
+        if (id == null || id.isBlank()) {
+            return Optional.empty();
+        }
+        return obtenerTodos().stream()
+                .filter(itinerario -> id.equals(itinerario.getId()))
+                .findFirst();
+    }
+
+    public boolean eliminarItinerario(String id) {
+        if (id == null || id.isBlank()) {
+            return false;
+        }
+
+        List<ControlDeItinerario> itinerarios = obtenerTodos();
+        boolean eliminado = itinerarios.removeIf(itinerario -> itinerario != null
+                && id.equals(itinerario.getId()));
+        return eliminado && guardarTodos(itinerarios);
+    }
+
+    public boolean reservarAsiento(String idItinerario) {
+        List<ControlDeItinerario> itinerarios = obtenerTodos();
+        for (ControlDeItinerario itinerario : itinerarios) {
+            if (idItinerario.equals(itinerario.getId())) {
+                UnidadDeTransporte unidad = itinerario.getUnidad();
+                if (unidad == null || unidad.getAsientosDisponibles() <= 0) {
+                    return false;
+                }
+                unidad.setAsientosDisponibles(unidad.getAsientosDisponibles() - 1);
+                return guardarTodos(itinerarios);
+            }
+        }
+        return false;
+    }
+
+    public boolean liberarAsiento(String idItinerario) {
+        List<ControlDeItinerario> itinerarios = obtenerTodos();
+        for (ControlDeItinerario itinerario : itinerarios) {
+            if (idItinerario.equals(itinerario.getId())) {
+                UnidadDeTransporte unidad = itinerario.getUnidad();
+                if (unidad == null || unidad.getAsientosDisponibles() >= unidad.getCapacidad()) {
+                    return false;
+                }
+                unidad.setAsientosDisponibles(unidad.getAsientosDisponibles() + 1);
+                return guardarTodos(itinerarios);
+            }
+        }
+        return false;
+    }
+
     /*
       Guarda la lista completa de itinerarios en el archivo JSON.
      */
@@ -93,6 +153,23 @@ public class ItinerarioService {
 
     private Optional<String> encontrarConflicto(List<ControlDeItinerario> itinerarios,
             ControlDeItinerario nuevoItinerario) {
+        if (nuevoItinerario.getRuta() == null
+                || nuevoItinerario.getRuta().getMunicipios() == null
+                || nuevoItinerario.getRuta().getMunicipios().size() != 1
+                || nuevoItinerario.getRuta().getMunicipios().get(0) == null
+                || nuevoItinerario.getRuta().getMunicipios().get(0).isBlank()) {
+            return Optional.of("Seleccione el municipio al que pertenece la ruta.");
+        }
+        String municipioSeleccionado = nuevoItinerario.getRuta().getMunicipios().get(0).trim();
+        boolean municipioExiste = tarifaService.obtenerMunicipios().stream()
+                .anyMatch(municipio -> municipio != null
+                        && municipio.getMunicipioNombre() != null
+                        && municipio.getMunicipioNombre().equalsIgnoreCase(
+                                municipioSeleccionado));
+        if (!municipioExiste) {
+            return Optional.of("El municipio seleccionado ya no existe en la base de datos de municipios.");
+        }
+
         Integer salidaNueva = convertirHoraAEntero(nuevoItinerario.getFechaSalida());
         Integer llegadaNueva = convertirHoraAEntero(nuevoItinerario.getFechaLlegada());
         if (salidaNueva == null || llegadaNueva == null) {

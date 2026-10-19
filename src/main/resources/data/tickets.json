@@ -1,0 +1,33 @@
+[ {
+  "idTicket" : "TICK-8840E3ED",
+  "cedulaUsuario" : "2",
+  "nombreRuta" : "ccs los teques",
+  "tipoRuta" : "EXTRAURBANA",
+  "rolUsuario" : "ESTUDIANTE",
+  "montoCobrado" : 88.0,
+  "fechaHora" : "2026-10-18T22:59:51.607337800"
+}, {
+  "idTicket" : "TICK-5D1B6C60",
+  "cedulaUsuario" : "2",
+  "nombreRuta" : "ccs los teques",
+  "tipoRuta" : "EXTRAURBANA",
+  "rolUsuario" : "ESTUDIANTE",
+  "montoCobrado" : 88.0,
+  "fechaHora" : "2026-10-18T23:00:29.271875"
+}, {
+  "idTicket" : "TICK-6156C7FA",
+  "cedulaUsuario" : "2",
+  "nombreRuta" : "ccs los teques",
+  "tipoRuta" : "EXTRAURBANA",
+  "rolUsuario" : "ESTUDIANTE",
+  "montoCobrado" : 88.0,
+  "fechaHora" : "2026-10-18T23:00:40.036533500"
+}, {
+  "idTicket" : "TICK-04816702",
+  "cedulaUsuario" : "2",
+  "nombreRuta" : "ucv las adjuntas",
+  "tipoRuta" : "URBANA",
+  "rolUsuario" : "ESTUDIANTE",
+  "montoCobrado" : 22.0,
+  "fechaHora" : "2026-10-18T23:20:45.135304600"
+} ]

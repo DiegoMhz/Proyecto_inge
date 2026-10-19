@@ -12,6 +12,7 @@ import java.awt.*;
 public class AdminHome extends JFrame {
         private CustomIconButton btnGestionUnidades;
         private CustomIconButton btnGestionFlota;
+        private CustomIconButton btnGestionTarifas;
         private CustomIconButton btnRegistro;
         // private CustomIconButton btnGestionRutas;
         // private CustomIconButton btnGestionReportes;
@@ -80,11 +81,14 @@ public class AdminHome extends JFrame {
                 btnGestionFlota = new CustomIconButton(
                                 "<html><center>Control de<br>Itinerarios</center></html>",
                                 "icons/circulo.png");
+                btnGestionTarifas = new CustomIconButton(
+                                "<html><center>Gestión de<br>Tarifas</center></html>");
                 panelBotones.add(btnRegistro);
                 panelBotones.add(btnGestionUnidades);
                 // panelBotones.add(btnGestionRutas);
                 // panelBotones.add(btnGestionReportes);
                 panelBotones.add(btnGestionFlota);
+                panelBotones.add(btnGestionTarifas);
                 panelBotones.setOpaque(false);
                 panel.add(panelBotones);
 
@@ -100,6 +104,11 @@ public class AdminHome extends JFrame {
 
                 btnRegistro.addActionListener(e -> {
                         new Registro(true).setVisible(true);
+                        this.dispose();
+                });
+
+                btnGestionTarifas.addActionListener(e -> {
+                        new GestionTarifas().setVisible(true);
                         this.dispose();
                 });
 

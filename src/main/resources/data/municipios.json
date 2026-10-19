@@ -1,1 +1,7 @@
-[]
+[ {
+  "municipioNombre" : "Libertador",
+  "municipioTarifa" : 220.0
+}, {
+  "municipioNombre" : "Los Teques",
+  "municipioTarifa" : 880.0
+} ]

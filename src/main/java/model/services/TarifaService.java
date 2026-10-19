@@ -23,8 +23,8 @@ public class TarifaService {
     private final File archivoMunicipios;
     private final File archivoDescuentos;
     private final ObjectMapper mapper;
-    private float DescuentoEstudiante;
-    private float DescuentoEmpleado;
+    private int DescuentoEstudiante;
+    private int DescuentoEmpleado;
 
     public TarifaService() {
         this(new File(RUTA_MUNICIPIOS), new File(RUTA_DESCUENTOS));
@@ -66,6 +66,38 @@ public class TarifaService {
         }
     }
 
+    public boolean guardarMunicipio(Municipio municipio) {
+        if (municipioInvalido(municipio)) {
+            System.err.println("No se puede guardar un municipio con datos inválidos.");
+            return false;
+        }
+
+        List<Municipio> municipios = new ArrayList<>();
+        if (archivoMunicipios.exists()) {
+            try {
+                municipios = mapper.readValue(archivoMunicipios, new TypeReference<List<Municipio>>() {});
+                if (municipios == null) {
+                    System.err.println("El archivo de municipios no contiene una lista válida.");
+                    return false;
+                }
+            } catch (IOException e) {
+                System.err.println("Error al leer los municipios antes de guardar: " + e.getMessage());
+                return false;
+            }
+        }
+
+        for (Municipio existente : municipios) {
+            if (existente != null && existente.getMunicipioNombre() != null
+                    && existente.getMunicipioNombre().equalsIgnoreCase(municipio.getMunicipioNombre().trim())) {
+                existente.setMunicipioTarifa(municipio.getMunicipioTarifa());
+                return guardarMunicipios(municipios);
+            }
+        }
+
+        municipios.add(new Municipio(municipio.getMunicipioNombre().trim(), municipio.getMunicipioTarifa()));
+        return guardarMunicipios(municipios);
+    }
+
     public boolean actualizarTarifaMunicipio(String nombreMunicipio, float nuevaTarifa) {
         if (nombreMunicipio == null || nombreMunicipio.isBlank()
                 || !Float.isFinite(nuevaTarifa) || nuevaTarifa < 0) {
@@ -92,12 +124,14 @@ public class TarifaService {
         }
 
         try {
-            Map<String, Float> descuentos = mapper.readValue(
-                    archivoDescuentos, new TypeReference<Map<String, Float>>() {});
-            Float descuentoEstudiante = descuentos.get(CLAVE_DESCUENTO_ESTUDIANTE);
-            Float descuentoEmpleado = descuentos.get(CLAVE_DESCUENTO_EMPLEADO);
-            if (!porcentajeValido(descuentoEstudiante) || !porcentajeValido(descuentoEmpleado)) {
-                System.err.println("El archivo de descuentos debe contener porcentajes válidos para estudiante y empleado.");
+            Map<String, Integer> descuentos = mapper.readValue(
+                    archivoDescuentos, new TypeReference<Map<String, Integer>>() {});
+            Integer descuentoEstudiante = descuentos.get(CLAVE_DESCUENTO_ESTUDIANTE);
+            Integer descuentoEmpleado = descuentos.get(CLAVE_DESCUENTO_EMPLEADO);
+            if (!descuentoEstudianteValido(descuentoEstudiante)
+                    || !descuentoEmpleadoValido(descuentoEmpleado)) {
+                System.err.println("El porcentaje debe estar entre el 10 y 20% para estudiantes, "
+                        + "y entre el 30 y 60% para empleados y profesores.");
                 return false;
             }
 
@@ -110,13 +144,15 @@ public class TarifaService {
         }
     }
 
-    public boolean guardarDescuentos(float descuentoEstudiante, float descuentoEmpleado) {
-        if (!porcentajeValido(descuentoEstudiante) || !porcentajeValido(descuentoEmpleado)) {
-            System.err.println("Los porcentajes de descuento deben ser números finitos no negativos.");
+    public boolean guardarDescuentos(int descuentoEstudiante, int descuentoEmpleado) {
+        if (!descuentoEstudianteValido(descuentoEstudiante)
+                || !descuentoEmpleadoValido(descuentoEmpleado)) {
+            System.err.println("El porcentaje debe estar entre el 10 y 20% para estudiantes, "
+                    + "y entre el 30 y 60% para empleados y profesores.");
             return false;
         }
 
-        Map<String, Float> descuentos = new LinkedHashMap<>();
+        Map<String, Integer> descuentos = new LinkedHashMap<>();
         descuentos.put(CLAVE_DESCUENTO_ESTUDIANTE, descuentoEstudiante);
         descuentos.put(CLAVE_DESCUENTO_EMPLEADO, descuentoEmpleado);
 
@@ -132,11 +168,11 @@ public class TarifaService {
         }
     }
 
-    public float getDescuentoEstudiante() {
+    public int getDescuentoEstudiante() {
         return DescuentoEstudiante;
     }
 
-    public float getDescuentoEmpleado() {
+    public int getDescuentoEmpleado() {
         return DescuentoEmpleado;
     }
 
@@ -147,8 +183,12 @@ public class TarifaService {
                 || municipio.getMunicipioTarifa() < 0;
     }
 
-    private boolean porcentajeValido(Float porcentaje) {
-        return porcentaje != null && Float.isFinite(porcentaje) && porcentaje >= 0;
+    private boolean descuentoEstudianteValido(Integer porcentaje) {
+        return porcentaje != null && porcentaje >= 10 && porcentaje <= 20;
+    }
+
+    private boolean descuentoEmpleadoValido(Integer porcentaje) {
+        return porcentaje != null && porcentaje >= 30 && porcentaje <= 60;
     }
 
     private void crearDirectorioPadre(File archivo) throws IOException {

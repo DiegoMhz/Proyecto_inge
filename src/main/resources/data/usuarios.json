@@ -47,4 +47,18 @@
   "lastName" : "dsada",
   "cedula" : "321321",
   "correo" : "sdadas@gmail.com"
+}, {
+  "rol" : "ADMINISTRADOR",
+  "name" : "daniel",
+  "password" : "1",
+  "lastName" : "testeadol",
+  "cedula" : "1",
+  "correo" : "hola@gmail.com"
+}, {
+  "rol" : "ESTUDIANTE",
+  "name" : "danielinho",
+  "password" : "2",
+  "lastName" : "dos santos testinho",
+  "cedula" : "2",
+  "correo" : "fabriziofauna@gmail.com"
 } ]

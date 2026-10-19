@@ -11,4 +11,11 @@
   "modelo" : "Encava Especial",
   "capacidad_de_pasajeros" : 35,
   "estadoOperativo" : "activo"
-} ]
+},
+{
+  "numeroAsignado" : "U-1",
+  "placa" : "UCV-123",
+  "modelo" : "Encava Especial",
+  "capacidad_de_pasajeros" : 35,
+  "estadoOperativo" : "activo"
+}  ]

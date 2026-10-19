@@ -18,6 +18,7 @@ public class RecargaPagoMovil extends JFrame {
     private JTextField txtCedula;
     private JTextField txtMonto;
     private JTextField txtReferencia;
+    private JLabel lblSaldoActual;
 
     public RecargaPagoMovil() {
         this.gestorMonedero = new GestorMonedero();
@@ -67,6 +68,13 @@ public class RecargaPagoMovil extends JFrame {
         panelTop.add(title, BorderLayout.WEST);
         panelTop.add(panelBtnWrapper, BorderLayout.EAST);
         panelTarjeta.add(panelTop);
+
+        lblSaldoActual = new JLabel();
+        lblSaldoActual.setForeground(Color.WHITE);
+        lblSaldoActual.setFont(new Font("SansSerif", Font.BOLD, 14));
+        lblSaldoActual.setAlignmentX(Component.CENTER_ALIGNMENT);
+        actualizarSaldoActual();
+        panelTarjeta.add(lblSaldoActual);
 
         panelTarjeta.add(Box.createVerticalStrut(15));
 
@@ -205,6 +213,7 @@ public class RecargaPagoMovil extends JFrame {
                     "Recarga Exitosa",
                     JOptionPane.INFORMATION_MESSAGE);
 
+            actualizarSaldoActual();
             limpiarFormulario();
         } else {
             JOptionPane.showMessageDialog(this,
@@ -212,6 +221,15 @@ public class RecargaPagoMovil extends JFrame {
                     "Error de Procesamiento",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void actualizarSaldoActual() {
+        Usuario usuarioActual = SesionUsuario.getUsuarioLogueado();
+        String cedula = usuarioActual == null ? null : usuarioActual.getCedula();
+        Monedero monedero = cedula == null ? null : gestorMonedero.buscarPorCedula(cedula);
+        double saldo = monedero == null ? 0.0 : monedero.getSaldo();
+        lblSaldoActual.setText("Monto actual del usuario: "
+                + String.format(java.util.Locale.US, "%.2f", saldo) + " BS");
     }
 
     private void limpiarFormulario() {

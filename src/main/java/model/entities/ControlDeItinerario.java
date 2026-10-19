@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.List;
+
 import model.services.UnidadDeTransporte;
 
 public class ControlDeItinerario {
@@ -21,6 +23,16 @@ public class ControlDeItinerario {
         this.conductor = conductor;
         this.fechaHoraSalida = fechaHoraSalida;
         this.fechaHoraLlegadaEstimada = fechaHoraLlegadaEstimada;
+    }
+
+    public ControlDeItinerario(String id, Ruta ruta, UnidadDeTransporte unidad, Usuario conductor,
+            String fechaHoraSalida, String fechaHoraLlegadaEstimada, String municipioNombre) {
+        this(id, ruta, unidad, conductor, fechaHoraSalida, fechaHoraLlegadaEstimada);
+        if (ruta != null) {
+            ruta.setMunicipios(municipioNombre == null || municipioNombre.isBlank()
+                    ? List.of()
+                    : List.of(municipioNombre.trim()));
+        }
     }
 
     public String getId() { return id; }

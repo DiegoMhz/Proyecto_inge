@@ -13,6 +13,7 @@ public class UsuarioHome extends JFrame {
     private CustomIconButton btnRutasUrbanas;
     private CustomIconButton btnRutasExtraurbanas;
     private CustomIconButton btnRecargar;
+    private CustomIconButton btnComprarTicket;
 
     public UsuarioHome() {
         initUI();
@@ -49,9 +50,9 @@ public class UsuarioHome extends JFrame {
         panelTarjeta.add(Box.createVerticalStrut(35)); // Espaciado entre título y botones
 
         // Panel para colocar los dos botones verticalmente
-        JPanel panelBotones = new JPanel(new GridLayout(2, 1, 0, 20));
+        JPanel panelBotones = new JPanel(new GridLayout(2, 2, 20, 20));
         panelBotones.setOpaque(false);
-        panelBotones.setMaximumSize(new Dimension(280, 280));
+        panelBotones.setMaximumSize(new Dimension(320, 320));
 
         // Botón 1: Rutas Urbanas
         btnRutasUrbanas = new CustomIconButton(
@@ -69,10 +70,14 @@ public class UsuarioHome extends JFrame {
                 "<html><center>Recargar</center></html>",
                 "icons/circulo.png" // Ajusta a la ruta de tu ícono
         );
+        btnComprarTicket = new CustomIconButton(
+                "<html><center>Comprar<br>ticket</center></html>",
+                "icons/bus.png");
 
         panelBotones.add(btnRutasUrbanas);
         panelBotones.add(btnRutasExtraurbanas);
         panelBotones.add(btnRecargar);
+        panelBotones.add(btnComprarTicket);
         panelTarjeta.add(panelBotones);
 
         // Agregar la tarjeta centrada al fondo
@@ -91,6 +96,11 @@ public class UsuarioHome extends JFrame {
 
         btnRecargar.addActionListener(e -> {
             new RecargaPagoMovil().setVisible(true);
+            this.dispose();
+        });
+
+        btnComprarTicket.addActionListener(e -> {
+            new CompraTicket().setVisible(true);
             this.dispose();
         });
     }
