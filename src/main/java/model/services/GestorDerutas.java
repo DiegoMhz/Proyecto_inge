@@ -11,7 +11,7 @@ import java.util.List;
 
 public class GestorDerutas{
     private List<Ruta> rutas;
-    private final File archivoRutas = new File("src/main/java/resource/data/rutas.json");
+    private final File archivoRutas = new File("src/main/resources/data/rutas.json");
     private final ObjectMapper mapper = new ObjectMapper();
 
     public GestorDerutas(){
